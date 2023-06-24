@@ -1,0 +1,132 @@
+@media screen and (max-width: 1199px) {
+    #basic-navbar-notification, #basic-navbar-user {
+        position: relative !important;
+        box-shadow: none !important;;
+    }
+    .item-notification, .item-user {
+        padding: 0 !important;
+    }
+    #basic-navbar-notification {
+        display: inline-block !important;
+    }
+    #basic-navbar-user {
+        display: inline-block !important;
+    }
+    #home-nav-notification {
+        flex-wrap: nowrap !important;
+    }
+    #basic-navbar-notification .navbar-nav .dropdown-menu,
+    #basic-navbar-user .navbar-nav .dropdown-menu {
+        position: absolute !important;
+    }
+    .navbar-expand-lg .navbar-nav {
+        flex-direction: column !important;
+    }
+    .navbar-nav .nav-item.show .dropdown-menu {
+        position: static !important;
+    }
+    #basic-navbar-nav>.navbar-nav, #basic-navbar-nav-right>.navbar-nav {
+        width: 100% !important;
+    }
+    #basic-navbar-nav-right a.dropdown-item {
+        text-align: center !important;
+    }
+    .navbar-expand-lg .dropdown-menu .dropdown-toggle:after {
+        position: relative !important;
+    }
+    .navbar-expand-lg .navbar-collapse {
+        display: flex !important;
+        flex-basis: auto;
+    }    
+}
+
+// .dropdown-toggle::after{
+//     content: "\f107" !important;
+//     font-family: "fontawesome", sans-serif !important;
+//     border: none !important;
+//     vertical-align: middle !important;
+// }
+
+// .dropdown-submenu-container a.dropdown-submenu::after {
+//     content: "\f141" !important;
+//     font-family: "fontawesome", sans-serif !important;
+//     transform: none !important;
+//     top: initial !important;
+//     margin-right: 0.3rem;
+// }
+// .item-custom .dropdown-toggle::after {
+//     display: none !important;
+// }
+// .item-custom .dropdown-toggle::before {
+//     font-family: "fontawesome", sans-serif !important;
+//     content: "\f141" !important;
+//     right: unset !important;
+//     margin-left: 0 !important;
+// }
+// .menu-icon-item:before {
+//     font-family: "bootstrap-icons", sans-serif !important;
+//     border: none !important;
+//     vertical-align: middle !important;
+//     margin-right: 0.5rem;
+// }
+// a#custom-support:before {
+//     content : "\f467" !important;
+//     color: rgba(var(--bs-warning-rgb, 1)) !important;
+// }
+// a#custom-doc:before {
+//     content : "\f228" !important;
+//     color: rgba(var(--bs-danger-rgb, 1)) !important;
+// }
+// a#custom-rtl:before {
+//     content : "\f5d5" !important;
+//     color: rgba(var(--bs-info-rgb, 1)) !important;
+// }
+// a#custom-buy:before {
+//     content : "\f29a" !important;
+//     color: rgba(var(--bs-success-rgb, 1)) !important;
+// }
+// a#custom-comp:before {
+//     content : "\f502" !important;
+//     color: rgba(var(--bs-orange-rgb, 1)) !important;
+// }
+// .menu-icon-fa:before {
+//     font-family: "fontawesome", sans-serif !important;
+//     border: none !important;
+//     margin-right: 0.5rem;
+// }
+// a#nav-item-hotel:before {
+//     content : "\f594" !important;
+// }
+// a#nav-item-flight:before {
+//     content : "\f072" !important;
+// }
+// a#nav-item-tour:before {
+//     content : "\f57d" !important;
+// }
+// a#nav-item-cab:before {
+//     content : "\f1b9" !important;
+// }
+
+
+// @media screen and (min-width: 1200px) {
+//     // .dropdown-menu {
+//     //     width: 240px !important;
+//     // }
+//     .dropdown-submenu-container .dropdown-menu {
+//         visibility: hidden;
+//         opacity: 0;
+//         -webkit-transition: all 0.1s ease-in-out;
+//         transition: all 0.1s ease-in-out;
+//         display: block;
+//         margin-left: -0.5rem !important;
+//     }
+//     .dropdown-submenu-container:hover .dropdown-menu {
+//         visibility: visible;
+//         opacity: 1;
+//         -webkit-transition: all 0.3s ease-in-out;
+//         transition: all 0.3s ease-in-out;
+//         -webkit-box-shadow: 0px 0px 40px rgba(29, 58, 83, 0.1);
+//         box-shadow: 0px 0px 40px rgba(29, 58, 83, 0.1);
+//         margin-left: 0.5rem !important;
+//     }
+// }

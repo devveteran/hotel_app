@@ -4,7 +4,7 @@
     display: flex;
     // align-items: center;
     justify-content: space-between;
-    width: 100%;
+    flex-grow: 1;
     // flex-basis: auto;
     // min-width:0;
     // flex: auto;     
@@ -22,12 +22,19 @@
     transform: none !important;
     top: initial !important;
     margin-right: 0.3rem;
+    right: 1rem;
 }
 .item-custom .dropdown-toggle::after {
+    display: none !important;
+}
+.item-custom .dropdown-toggle::before {
+    font-family: "fontawesome", sans-serif !important;
     content: "\f141" !important;
+    right: unset !important;
+    margin-left: 0 !important;
 }
 .menu-icon-item:before {
-    font-family: "bootstrapicon", sans-serif !important;
+    font-family: "bootstrap-icons", sans-serif !important;
     border: none !important;
     vertical-align: middle !important;
     margin-right: 0.5rem;
@@ -91,8 +98,10 @@ a#nav-item-cab:before {
 //     border: 1px solid $border-color !important;
 //     border-radius: 0.5rem !important;
 // }    
-
 @media screen and (min-width: 1200px) {
+    // .navbar-toggler {
+    //     display: inline-block !important;
+    //   }
     // .dropdown-submenu-container .dropdown-menu {
     //     left: calc(100% + 20px) !important;
     //     margin-left: 0px !important;
@@ -114,7 +123,8 @@ a#nav-item-cab:before {
         -webkit-transition: all 0.1s ease-in-out;
         transition: all 0.1s ease-in-out;
         display: block;
-        margin-left: -0.5rem !important;
+        margin-left: -1.5rem !important;
+        left: 100%;        
     }
     .dropdown-submenu-container:hover .dropdown-menu {
         visibility: visible;
@@ -123,11 +133,14 @@ a#nav-item-cab:before {
         transition: all 0.3s ease-in-out;
         -webkit-box-shadow: 0px 0px 40px rgba(29, 58, 83, 0.1);
         box-shadow: 0px 0px 40px rgba(29, 58, 83, 0.1);
-        margin-left: 0.5rem !important;
+        margin-left: -0.5rem !important;
     }
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1199px) {
+    .dropdown-submenu-container a.dropdown-submenu::after {
+        right: 0rem !important;
+    }    
     .navbar-collapse.show {
         position: absolute;
         top: 100px;
@@ -144,6 +157,10 @@ a#nav-item-cab:before {
 .nav-link {
     transition: all 0.3s !important;
 }
+#basic-navbar-nav-right .nav-link{
+    padding: 0.5rem 0.8rem !important;
+    margin: 0 2px !important;
+}
 .navbar-expand-lg .navbar-nav .nav-link {
     padding-right: 1rem !important;
     padding-left: 1rem !important;
@@ -153,7 +170,7 @@ a#nav-item-cab:before {
 }
 
 a#nav-notification:before {
-    font-family: "bootstrapicon", sans-serif !important;
+    font-family: "bootstrap-icons", sans-serif !important;
     content: "\f18a" !important;
     line-height: 1;
     position: absolute;
@@ -189,7 +206,7 @@ a#nav-notification:active {
     height: 100%;
     margin: auto;
 }
-.menu-icon-fa:hover, .nav-icon-fa:active {
+.menu-icon-fa:hover, .nav-icon-fa:active, .menu-icon-fa.active{
     background-color: rgba(var(--bs-primary-rgb), 0.1) !important;
     border-radius: 0.5rem !important;
 }
@@ -265,3 +282,49 @@ a#nav-profile:after{
     right: 0 !important;
     left: auto !important;
 }
+
+#basic-navbar-toggle-button:after {
+    content: 'Menu';
+    vertical-align: middle;
+}
+#navbar-category-toggle-button:after {
+    content: 'Category';
+    vertical-align: middle;
+}
+#navbar-category-toggle-button>span {
+    background-image: none !important;
+    height: 100%;
+    justify-content: flex-end;
+}
+#navbar-category-toggle-button>span:before {
+    font-family: "bootstrap-icons", sans-serif !important;    
+    content: "\f3f8" !important;
+    vertical-align: middle;
+}
+.header-sticky .container {
+    flex-wrap: nowrap !important;
+}
+
+// @media screen and (min-width: 1024px){
+//     // .navbar-expand-xl .navbar-collapse {
+//     //     box-shadow: none !important;
+//     //     position: relative !important;
+//     //     left: auto !important;
+//     //     right: auto !important;
+//     //     top: auto !important;
+//     //     background: var(--bs-body-bg);
+//     //     border-top: none !important;
+//     // }    
+//     #home-nav-user, #home-nav-notification {
+//         width:42px !important;
+//         height: 42px !important;
+//         align-self: center !important;
+//     }    
+// }
+
+// @media screen and (max-width: 1200px) {
+//     .navbar-expand-lg .navbar-collapse {
+//         display: unset;
+//         flex-basis: none !important;
+//     }
+// }

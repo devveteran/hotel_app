@@ -1,0 +1,14 @@
+.teamsection .react-multiple-carousel__arrow {
+    border: 2px solid var(--bs-body-color);
+    
+    background-color: var(--bs-body-bg);
+    line-height: 45px !important;
+}
+.teamsection .react-multiple-carousel__arrow > i {
+    color: var(--bs-body-color) !important;
+}
+.teamsection .react-multiple-carousel__arrow:hover {
+    border: 2px solid var(--bs-gray-800) !important;
+    color: var(--bs-gray-800) !important;
+    background-color: var(--bs-body-bg) !important;
+}

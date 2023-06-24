@@ -19,13 +19,19 @@ code {
 }
 
 @font-face {
-  font-family: "bootstrapicon";
-  src: local("bootstrapicon"),
+  font-family: "bootstrap-icons";
+  src: local("bootstrap-icons"),
     url("/src/assets/fonts/bootstrap-icons.woff") format("truetype");
 }
 
-@font-face {
+/* @font-face {
   font-family: "DM Sans";
   src: local("DM Sans"),
-    url("/src/assets/fonts/DMSans-Regular.ttf") format("truetype");
-}
+    url("/src/assets/fonts/DMSans-Medium.ttf") format("truetype");
+} */
+
+/* @font-face {
+  font-family: "Poppins";
+  src: local("Poppins"),
+    url("/src/assets/fonts/Poppins-Medium.ttf") format("truetype");
+} */

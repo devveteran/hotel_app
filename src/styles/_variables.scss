@@ -1,4 +1,4 @@
-// Variables// Variables
+// Variables
 // Bootstrap variable overrides by theme author
 // Color system
 
@@ -495,7 +495,7 @@ $navbar-light-toggler-border-color: rgba($black, .1);
 
 // Dropdowns
 
-$dropdown-min-width:                16rem;
+$dropdown-min-width:                15rem;
 $dropdown-padding-x:                0.8rem;
 $dropdown-padding-y:                1rem;
 $dropdown-spacer:                   0;
@@ -680,4 +680,4 @@ $form-fs-lg: 1.2rem;
 $form-fs-md: 1rem;
 $form-fs-sm: 0.875rem;
 
-$fa-font-family: 'fontawesome';
+$fa-font-family:        'Font Awesome 6 Free';  // If you are changing from free to pro. Change font-family here

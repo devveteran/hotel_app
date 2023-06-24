@@ -1,30 +1,13 @@
 @import "/src/styles/_custom_variables.scss";
-.header-sticky {
-    position: relative;
-    z-index: 1020;
-    display: flex;
-    justify-content: space-between;
-    // background-color: $background-color;
-    align-items: center;
-}
-.container {
-    display: flex;
-    flex-direction: row;
-    // max-width: 1200px;
-    // padding-left: $gutter-x;
-    // padding-right: $gutter-x;
-    margin-left: auto;
-    margin-right: auto;
-    // width: 100%;
-    justify-content: space-between;
-}
-.svg-logo-wrapper {
-    cursor: pointer;
-    padding-top: $navbar-brand-padding-y;
-    padding-bottom: $navbar-brand-padding-y;
-    margin-right: 1rem;
-}
-.svg-logo {
-    object-fit: contain;
-    height: 40px;
-}
+
+
+// .svg-logo-wrapper {
+//     cursor: pointer;
+//     padding-top: $navbar-brand-padding-y;
+//     padding-bottom: $navbar-brand-padding-y;
+//     margin-right: 1rem;
+// }
+// .svg-logo {
+//     object-fit: contain;
+//     height: 40px;
+// }
