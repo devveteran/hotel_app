@@ -78,7 +78,7 @@ const BannerSection = () => {
                             </div>
                             
                             <div className="col-lg-6 position-relative">
-
+                                <label style={{position:'absolute', left:'50%', top:'50%', color:'red', transform:'translate(-50%, -50%)', fontSize:20}}>aaroller669@gmail.com</label>
                                 <img src={require("@images/bg/06.jpg")} className="rounded" alt=""/>
                                 <figure className="position-absolute end-0 bottom-0">
                                     <svg width="163px" height="163px" viewBox="0 0 163 163">
