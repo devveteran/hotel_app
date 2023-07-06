@@ -1,8 +1,9 @@
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import "./style.scss";
+import "./homecarosel.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAlipay } from "@fortawesome/free-brands-svg-icons";
+import { Link } from "react-router-dom";
 
 const responsive = {
     desktop: {
@@ -24,7 +25,7 @@ const responsive = {
 
 const CarouselSection = () => {
     return (
-        <section className='className="pb-2 pb-lg-5'>
+        <section className='className="pb-2 pb-lg-5 home-carousel'>
             <div className='container'>
                 <Carousel
                     swipeable={false}
@@ -32,7 +33,7 @@ const CarouselSection = () => {
                     showDots={false}
                     responsive={responsive}
                     infinite={true}
-                    autoPlay={true}
+                    autoPlay={false}
                     autoPlaySpeed={1000}
                     keyBoardControl={false}
                     customTransition="all 1s"
@@ -52,7 +53,9 @@ const CarouselSection = () => {
 
                                 <div className="col-sm-6">
                                     <div className="card-body px-3">
-                                        <h6 className="card-title"><a href="offer-detail.html" className="stretched-link">Daily 50 Lucky Winners get a Free Stay</a></h6>
+                                        <h6 className="card-title">
+                                            <Link to={"/"} className="stretched-link">Daily 50 Lucky Winners get a Free Stay</Link>
+                                        </h6>
                                         <p className="mb-0">Valid till: 15 Nov</p>
                                     </div>
                                 </div>
@@ -68,7 +71,9 @@ const CarouselSection = () => {
 
                                 <div className="col-sm-6">
                                     <div className="card-body px-3">
-                                        <h6 className="card-title"><a href="offer-detail.html" className="stretched-link">Daily 50 Lucky Winners get a Free Stay</a></h6>
+                                        <h6 className="card-title">
+                                            <Link to={"/"} className="stretched-link">Daily 50 Lucky Winners get a Free Stay</Link>
+                                        </h6>
                                         <p className="mb-0">Valid till: 15 Nov</p>
                                     </div>
                                 </div>
@@ -84,7 +89,9 @@ const CarouselSection = () => {
 
                                 <div className="col-sm-6">
                                     <div className="card-body px-3">
-                                        <h6 className="card-title"><a href="offer-detail.html" className="stretched-link">Daily 50 Lucky Winners get a Free Stay</a></h6>
+                                        <h6 className="card-title">
+                                            <Link to={"/"} className="stretched-link">Daily 50 Lucky Winners get a Free Stay</Link>
+                                        </h6>
                                         <p className="mb-0">Valid till: 15 Nov</p>
                                     </div>
                                 </div>
@@ -100,7 +107,9 @@ const CarouselSection = () => {
 
                                 <div className="col-sm-6">
                                     <div className="card-body px-3">
-                                        <h6 className="card-title"><a href="offer-detail.html" className="stretched-link">Daily 50 Lucky Winners get a Free Stay</a></h6>
+                                        <h6 className="card-title">
+                                            <Link to={"/"} className="stretched-link">Daily 50 Lucky Winners get a Free Stay</Link>
+                                        </h6>
                                         <p className="mb-0">Valid till: 15 Nov</p>
                                     </div>
                                 </div>

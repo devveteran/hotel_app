@@ -1,7 +1,8 @@
-import './style.scss';
+import './footer.scss';
 import { faFacebook, faFacebookF, faInstagram, faLinkedin, faLinkedinIn, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { faCar, faGlobeAmericas, faHotel, faPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
@@ -9,12 +10,16 @@ const Footer = () => {
             <div className="container">
                 <div className="row g-4">
                     <div className="col-lg-3">
-                        <a href="index.html">
+                        <Link to={'/'}>
                             <img className="h-40px" src={require("@images/logo-light.svg").default} alt="logo"/>
-                        </a>
+                        </Link>
                         <p className="my-3 text-muted">Departure defective arranging rapturous did believe him all had supported.</p>
-                        <p className="mb-2"><a href="#" className="text-muted text-primary-hover"><i className="bi bi-telephone me-2"></i>+1234 568 963</a> </p>
-                        <p className="mb-0"><a href="#" className="text-muted text-primary-hover"><i className="bi bi-envelope me-2"></i>example@gmail.com</a></p>
+                        <p className="mb-2">
+                            <a href="#" className="text-muted text-primary-hover"><i className="bi bi-telephone me-2"></i>+1234 568 963</a> 
+                        </p>
+                        <p className="mb-0">
+                            <a href="#" className="text-muted text-primary-hover"><i className="bi bi-envelope me-2"></i>example@gmail.com</a>
+                        </p>
                     </div>
 
                     <div className="col-lg-8 ms-auto">

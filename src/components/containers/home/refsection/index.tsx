@@ -1,5 +1,6 @@
 import { faHandHoldingHeart, faHandHoldingUsd } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 
 const ReferenceSection = () => {
     return (
@@ -37,10 +38,10 @@ const ReferenceSection = () => {
                         <h5 className="mb-4">Download app</h5>
                         <div className="row g-3">
                             <div className="col-6 col-sm-4 col-md-3 col-lg-6">
-                                <a href="#"> <img src={require("@images/element/google-play.svg").default} alt=""/> </a>
+                                <Link to={'/'}> <img src={require("@images/element/google-play.svg").default} alt=""/></Link>
                             </div>
                             <div className="col-6 col-sm-4 col-md-3 col-lg-6">
-                                <a href="#"> <img src={require("@images/element/app-store.svg").default} alt=""/> </a>
+                                <Link to={'/'}> <img src={require("@images/element/app-store.svg").default} alt=""/></Link>
                             </div>
                         </div>
                     </div>

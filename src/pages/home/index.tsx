@@ -1,5 +1,4 @@
-import Header from "@containers/common/header";
-import './style.scss';
+import './home.scss';
 import BannerSection from "@containers/home/bannersection";
 import CarouselSection from "@containers/home/carouselsection";
 import StorySection from "@containers/home/storysection";
@@ -10,7 +9,7 @@ import ExploreSection from "@containers/home/exploresection";
 import ReferenceSection from "@containers/home/refsection";
 import Footer from "@containers/common/footer";
 import { useState, useEffect } from 'react';
-import TestHeader from "@containers/common/testheader";
+import Header from "@containers/common/header";
 const Home = () => {
     const [scroll, setScroll] = useState(false);
 
@@ -34,7 +33,7 @@ const Home = () => {
     return (
         <div className='home-view'>
             {/* <Header scroll={false}/> */}
-            <TestHeader scroll={scroll}/>
+            <Header scroll={scroll} showNavButtons={true}/>
             <BannerSection />
             <CarouselSection />
             <StorySection />

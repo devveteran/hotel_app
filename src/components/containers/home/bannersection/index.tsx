@@ -5,38 +5,13 @@ import Searchable from 'react-searchable-dropdown';
 import "flatpickr/dist/themes/material_green.css";
 import Flatpickr from "react-flatpickr";
 
-import './style.scss';
+import './homebanner.scss';
 import { Dropdown } from "react-bootstrap";
+import SearchBar from "@organisms/searchbar";
+import { Link } from "react-router-dom";
+
 
 const BannerSection = () => {
-    const [selectedLocation, setSelectedLocation] = useState<string>("");
-    const [selectedDate, setSelectedDate] = useState(Date());
-    const [showGuestMenu, setShowGuestMenu] = useState<boolean>(false);
-
-    const [adultNum, setAdultNum] = useState(0);
-    const [childNum, setChildNum] = useState(0);
-    const [roomNum, setRoomNum] = useState(0);
-
-    const increaseAdult = (e: any, v:number) => {
-        e.preventDefault();
-        if (adultNum + v >= 0)
-            setAdultNum(adultNum + v );
-        else
-            setAdultNum(0);
-    }
-
-    const increaseChild = (v:number) => {
-        if (childNum + v >= 0)
-            setChildNum(childNum + v );
-        else
-            setChildNum(0);
-    }
-    const increaseRoom = (v:number) => {
-        if (roomNum + v >= 0)
-            setRoomNum(roomNum + v );
-        else
-            setRoomNum(0);
-    }
 
     useEffect(() => {
 
@@ -61,8 +36,8 @@ const BannerSection = () => {
                                 <p className="mb-4">We bring you not only a stay option, but an experience in your budget to enjoy the luxury.</p>
 
                                 <div className="hstack gap-4 flex-wrap align-items-center">
-                                    <a href="#" className="btn btn-primary-soft mb-0">Discover Now</a>
-                                    <a data-glightbox="" data-gallery="office-tour" href="https://www.youtube.com/embed/tXHviS-4ygo" className="d-block">
+                                    <Link to={'/'} className="btn btn-primary-soft mb-0">Discover Now</Link>
+                                    <Link data-glightbox="" data-gallery="office-tour" to={"/"} className="d-block">
                                         <div className="avatar avatar-md z-index-1 position-relative me-2">
                                             <img className="avatar-img rounded-circle" src={require("@images/avatar/12.jpg")} alt="avatar" />
                                             <div className="btn-round btn btn-xs btn-white shadow-sm position-absolute top-50 start-50 translate-middle z-index-9 mb-0"> 
@@ -73,7 +48,7 @@ const BannerSection = () => {
                                         <div className="align-middle d-inline-block" style={{marginLeft:4}}>
                                             <h6 className="fw-normal small mb-0">Watch our story</h6>
                                         </div>
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                             
@@ -117,182 +92,8 @@ const BannerSection = () => {
                     <div className="row">
                         <div className="col-xl-10 position-relative mt-n3 mt-xl-n9">
                             <h6 className="d-none d-xl-block mb-3">Check Availability</h6>
-
-                            <form className="card shadow rounded-3 position-relative p-4 pe-md-5 pb-5 pb-md-4">
-                                <div className="row g-4 align-items-center">
-                                    <div className="col-lg-4">
-                                        <div className="form-control-border form-control-transparent form-fs-md d-flex">
-                                            <i className="bi bi-geo-alt fs-3 me-2 mt-2"></i>
-                                            <div className="flex-grow-1">
-                                                <label className="form-label" style={{zIndex:11}}>Location</label>
-                                                <div id="selected-location" className="choices" data-type="select-one" tabIndex={0} role="combobox" aria-autocomplete="list" aria-haspopup="true" aria-expanded="false" style={{position:'relative'}}>
-                                                    <Searchable 
-                                                        value={selectedLocation}
-                                                        placeholder="Select Location" // by default "Search"
-                                                        notFoundText="No results found" // by default "No result found"
-                                                        
-                                                        options={[{
-                                                            value: '1',
-                                                            label: 'San Jacinto, USA'
-                                                        }, {
-                                                            value: '2',
-                                                            label: 'North Dakota, Canada'
-                                                        },{
-                                                            value: '3',
-                                                            label: 'West Virginia, Paris'
-                                                        }]}
-                                                        onSelect={(value:any) => {
-                                                            setSelectedLocation(value);
-                                                        }}
-                                                        listMaxHeight={200} //by default 140
-                                                    />                                                    
-                                                    {/* <div className="choices__inner" style={{position:'absolute', width:'100%', height:'100%'}}></div>
-                                                    <div className="choices__inner" style={{borderWidth:0}}>
-                                                        
-                                     
-                                                    </div> */}
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-lg-4">
-                                        <div className="d-flex">
-                                            <i className="bi bi-calendar fs-3 me-2 mt-2"></i>
-                                            <div className="form-control-border form-control-transparent form-fs-md">
-                                                <label className="form-label">Check in - out</label>
-                                                <Flatpickr
-                                                    placeholder="Select date"
-                                                    className="form-control flatpickr flatpickr-input"
-                                                    options={{mode:'range', dateFormat:'d M', enableTime:false}}
-                                                    onChange={(date : any) => {
-                                                        console.log(date);
-                                                    }}
-                                                />                                                
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-lg-4">
-                                        <div className="form-control-border form-control-transparent form-fs-md d-flex">
-                                            <i className="bi bi-person fs-3 me-2 mt-2"></i>
-                                            <div className="w-100" id="select-guest-div">
-                                                <label className="form-label">Guests &amp; rooms</label>
-                                                <Dropdown className="guest-selector me-2" autoClose={"outside"}>
-                                                    <Dropdown.Toggle id="select-guest-button" variant="link" className="form-guest-selector form-control selection-result" style={{textAlign:'left'}}>
-                                                        {`${adultNum + childNum} Guests ${roomNum} Rooms`}
-                                                    </Dropdown.Toggle>
-
-                                                    <Dropdown.Menu className="dropdown-menu guest-selector-dropdown">
-                                                        <Dropdown.Item className="d-flex justify-content-between">
-                                                            <div>
-                                                                <h6 className="mb-0">Adults</h6>
-                                                                <small>Ages 13 or above</small>
-                                                            </div>
-
-                                                            <div className="hstack gap-1 align-items-center">
-                                                                <button type="button" className="btn btn-link adult-remove p-0 mb-0" onClick={(e:any) => increaseAdult(e, -1)}>
-                                                                    <i className="bi bi-dash-circle fs-5 fa-fw"></i>
-                                                                </button>
-                                                                <h6 className="guest-selector-count mb-0 adults">{adultNum}</h6>
-                                                                <button type="button" className="btn btn-link adult-add p-0 mb-0" onClick={(e:any) => increaseAdult(e, 1)}>
-                                                                    <i className="bi bi-plus-circle fs-5 fa-fw"></i>
-                                                                </button>
-                                                            </div>
-                                                        </Dropdown.Item>
-                                                        <div className="dropdown-divider"></div>
-                                                        <Dropdown.Item className="d-flex justify-content-between">
-                                                            <div>
-                                                                <h6 className="mb-0">Child</h6>
-                                                                <small>Ages 13 below</small>
-                                                            </div>
-
-                                                            <div className="hstack gap-1 align-items-center">
-                                                                <button type="button" className="btn btn-link child-remove p-0 mb-0" onClick={() => increaseChild(-1)}>
-                                                                    <i className="bi bi-dash-circle fs-5 fa-fw"></i>
-                                                                </button>
-                                                                <h6 className="guest-selector-count mb-0 child">{childNum}</h6>
-                                                                <button type="button" className="btn btn-link child-add p-0 mb-0" onClick={() => increaseChild(1)}>
-                                                                    <i className="bi bi-plus-circle fs-5 fa-fw"></i>
-                                                                </button>
-                                                            </div>
-                                                        </Dropdown.Item>
-                                                        <div className="dropdown-divider"></div>
-                                                        <Dropdown.Item className="d-flex justify-content-between">
-                                                            <div>
-                                                                <h6 className="mb-0">Rooms</h6>
-                                                                <small>Max room 8</small>
-                                                            </div>
-
-                                                            <div className="hstack gap-1 align-items-center">
-                                                                <button type="button" className="btn btn-link room-remove p-0 mb-0" onClick={() => increaseRoom(-1)}>
-                                                                    <i className="bi bi-dash-circle fs-5 fa-fw"></i>
-                                                                </button>
-                                                                <h6 className="guest-selector-count mb-0 rooms">{roomNum}</h6>
-                                                                <button type="button" className="btn btn-link room-add p-0 mb-0" onClick={() => increaseRoom(1)}>
-                                                                    <i className="bi bi-plus-circle fs-5 fa-fw"></i>
-                                                                </button>
-                                                            </div>
-                                                        </Dropdown.Item>
-                                                    </Dropdown.Menu>
-                                                </Dropdown>                                                
-                                                {/* <div className="dropdown guest-selector me-2">
-                                                    <input type="text" className="form-guest-selector form-control selection-result" value="2 Guests 1 Room" data-bs-auto-close="outside" data-bs-toggle="dropdown"/>
-                                                
-                                                    <ul className="dropdown-menu guest-selector-dropdown">
-                                                        <li className="d-flex justify-content-between">
-                                                            <div>
-                                                                <h6 className="mb-0">Adults</h6>
-                                                                <small>Ages 13 or above</small>
-                                                            </div>
-
-                                                            <div className="hstack gap-1 align-items-center">
-                                                                <button type="button" className="btn btn-link adult-remove p-0 mb-0"><i className="bi bi-dash-circle fs-5 fa-fw"></i></button>
-                                                                <h6 className="guest-selector-count mb-0 adults">2</h6>
-                                                                <button type="button" className="btn btn-link adult-add p-0 mb-0"><i className="bi bi-plus-circle fs-5 fa-fw"></i></button>
-                                                            </div>
-                                                        </li>
-
-                                                        <li className="dropdown-divider"></li>
-
-                                                        <li className="d-flex justify-content-between">
-                                                            <div>
-                                                                <h6 className="mb-0">Child</h6>
-                                                                <small>Ages 13 below</small>
-                                                            </div>
-
-                                                            <div className="hstack gap-1 align-items-center">
-                                                                <button type="button" className="btn btn-link child-remove p-0 mb-0"><i className="bi bi-dash-circle fs-5 fa-fw"></i></button>
-                                                                <h6 className="guest-selector-count mb-0 child">0</h6>
-                                                                <button type="button" className="btn btn-link child-add p-0 mb-0"><i className="bi bi-plus-circle fs-5 fa-fw"></i></button>
-                                                            </div>
-                                                        </li>
-
-                                                        <li className="dropdown-divider"></li>
-
-                                                        <li className="d-flex justify-content-between">
-                                                            <div>
-                                                                <h6 className="mb-0">Rooms</h6>
-                                                                <small>Max room 8</small>
-                                                            </div>
-
-                                                            <div className="hstack gap-1 align-items-center">
-                                                                <button type="button" className="btn btn-link room-remove p-0 mb-0"><i className="bi bi-dash-circle fs-5 fa-fw"></i></button>
-                                                                <h6 className="guest-selector-count mb-0 rooms">1</h6>
-                                                                <button type="button" className="btn btn-link room-add p-0 mb-0"><i className="bi bi-plus-circle fs-5 fa-fw"></i></button>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div> */}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="btn-position-md-middle">
-                                    <a className="icon-lg btn btn-round btn-primary mb-0" href="#"><i className="bi bi-search fa-fw"></i></a>
-                                </div>
-                            </form>
+                            <SearchBar />
+                            
                         </div>
                     </div>
                 </div>

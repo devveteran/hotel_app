@@ -1,3 +1,5 @@
+import './notification.module.scss';
+
 const Notifications = () => {
     return (
         <div className="card bg-transparent">

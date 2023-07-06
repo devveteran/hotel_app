@@ -2,6 +2,7 @@ import './App.scss';
 import Home from './pages/home';
 import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import SearchPage from './pages/searchpage';
 
 export const insertScript = (scriptToAdd: string) => {
   const script = document.createElement("script");
@@ -12,7 +13,7 @@ export const insertScript = (scriptToAdd: string) => {
 
 export const insertLocalScript = (scriptToAdd: string) => {
   const script = document.createElement("script");
-  script.innerHTML = require(`./assets/vendor/${scriptToAdd}`);
+  script.innerHTML = require(`./assets/${scriptToAdd}`);
   // script.async = true;
   document.body.appendChild(script);
 }
@@ -37,6 +38,7 @@ function App() {
     <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Routes>
         <Route path="/" Component={() => <Home/>} />
+        <Route path="/search" Component={() => <SearchPage />} />
       </Routes>
     </BrowserRouter>
   );

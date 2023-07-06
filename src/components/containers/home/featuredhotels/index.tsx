@@ -1,5 +1,6 @@
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 
 const FeaturedHotels = () => {
     return (
@@ -23,7 +24,7 @@ const FeaturedHotels = () => {
                             </div>
 
                             <div className="card-body px-2">
-                                <h5 className="card-title"><a href="hotel-detail.html" className="stretched-link">Baga Comfort</a></h5>
+                                <h5 className="card-title"><Link to={'/detail'} className="stretched-link">Baga Comfort</Link></h5>
                                 <div className="d-flex justify-content-between align-items-center">
                                     <h6 className="text-success mb-0">$455 <small className="fw-light">/starting at</small> </h6>
                                     <h6 className="mb-0">4.5<FontAwesomeIcon icon={faStar} className='ms-1 text-warning'/></h6>
@@ -42,7 +43,7 @@ const FeaturedHotels = () => {
                             </div>
 
                             <div className="card-body px-2">
-                                <h5 className="card-title"><a href="hotel-detail.html" className="stretched-link">New Apollo Hotel</a></h5>
+                                <h5 className="card-title"><Link to={'/detail'} className="stretched-link">New Apollo Hotel</Link></h5>
                                 <div className="d-flex justify-content-between align-items-center">
                                     <h6 className="text-success mb-0">$585 <small className="fw-light">/starting at</small> </h6>
                                     <h6 className="mb-0">4.8<FontAwesomeIcon icon={faStar} className='ms-1 text-warning'/></h6>
@@ -61,7 +62,7 @@ const FeaturedHotels = () => {
                             </div>
 
                             <div className="card-body px-2">
-                                <h5 className="card-title"><a href="hotel-detail.html" className="stretched-link">New Age Hotel</a></h5>
+                                <h5 className="card-title"><Link to={'/detail'} className="stretched-link">New Age Hotel</Link></h5>
                                 <div className="d-flex justify-content-between align-items-center">
                                     <h6 className="text-success mb-0">$385 <small className="fw-light">/starting at</small> </h6>
                                     <h6 className="mb-0">4.6<FontAwesomeIcon icon={faStar} className='ms-1 text-warning'/></h6>
@@ -80,7 +81,7 @@ const FeaturedHotels = () => {
                             </div>
 
                             <div className="card-body px-2">
-                                <h5 className="card-title"><a href="hotel-detail.html" className="stretched-link">Helios Beach Resort</a></h5>
+                                <h5 className="card-title"><Link to={'/detail'} className="stretched-link">Helios Beach Resort</Link></h5>
                                 <div className="d-flex justify-content-between align-items-center">
                                     <h6 className="text-success mb-0">$665 <small className="fw-light">/starting at</small> </h6>
                                     <h6 className="mb-0">4.8<FontAwesomeIcon icon={faStar} className='ms-1 text-warning'/></h6>

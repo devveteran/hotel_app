@@ -1,6 +1,6 @@
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import "./style.scss";
+import styles from "./hometeamsec.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAlipay } from "@fortawesome/free-brands-svg-icons";
 import { faStar, faUtensils } from "@fortawesome/free-solid-svg-icons";
@@ -26,9 +26,9 @@ const responsive = {
 const TeamSection = () => {
     return (
         <section className='pb-0 py-md-5'>
-            <div className='teamsection container'>
+            <div className={`${styles.teamsection} container`}>
                 <div className='row'>
-                    <div className='col-lg-11 mx-auto'>
+                    <div className='col-lg-11 mx-auto home-carousel'>
                         <Carousel
                             swipeable={false}
                             draggable={false}

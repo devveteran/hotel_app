@@ -8,7 +8,6 @@ import { store } from './store';
 // import 'bootstrap/dist/css/bootstrap.min.css'
 import '@styles/custom_bootstrap.css';
 import '@styles/bootstrap/bootstrap-icons.css';
-import { BrowserRouter} from 'react-router-dom';
 
 // import './assets/css/style.css';
 
