@@ -752,17 +752,17 @@ progress {
 
 @media (min-width: 576px) {
   .container-sm, .container {
-    max-width: 96%;
+    max-width: 100%;
   }
 }
 @media (min-width: 768px) {
   .container-md, .container-sm, .container {
-    max-width: 94%;
+    max-width: 100%;
   }
 }
 @media (min-width: 992px) {
   .container-lg, .container-md, .container-sm, .container {
-    max-width: 94%;
+    max-width: 100%;
   }
 }
 @media (min-width: 1200px) {
@@ -15699,7 +15699,7 @@ a.badge:hover {
     position: static;
   }
   .dropdown-fullwidth .dropdown-menu {
-    max-width: 96%;
+    max-width: 100%;
   }
 }
 @media (min-width: 768px) {
@@ -15707,7 +15707,7 @@ a.badge:hover {
     position: static;
   }
   .dropdown-fullwidth .dropdown-menu {
-    max-width: 94%;
+    max-width: 100%;
   }
 }
 @media (min-width: 992px) {
@@ -15715,7 +15715,7 @@ a.badge:hover {
     position: static;
   }
   .dropdown-fullwidth .dropdown-menu {
-    max-width: 94%;
+    max-width: 100%;
   }
 }
 @media (min-width: 1200px) {

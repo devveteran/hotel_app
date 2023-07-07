@@ -3,3 +3,8 @@
         transform: none !important; 
     }
 }
+.map-wrapper {
+    position: sticky;
+    height: calc(100vh - 64px);
+    top: 64px;
+}

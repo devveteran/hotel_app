@@ -35,7 +35,8 @@ export const removeScript = (scriptToremove: string) => {
 function App() {
   
   return (
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
+    <BrowserRouter>
+    {/* basename={process.env.PUBLIC_URL} */}
       <Routes>
         <Route path="/" Component={() => <Home/>} />
         <Route path="/search" Component={() => <SearchPage />} />
