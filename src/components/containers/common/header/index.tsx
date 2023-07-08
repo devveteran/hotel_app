@@ -28,6 +28,7 @@ const Header = ({scroll, showNavButtons} : PropType) => {
 
     const onClickNavMenu2 = () => {
         setOpenedNavMenuRight(!openedNavMenuRight);
+        console.log(!openedNavMenuRight);
     }
 
     useEffect(() => {
@@ -46,7 +47,7 @@ const Header = ({scroll, showNavButtons} : PropType) => {
                         <img className="dark-mode-item navbar-brand-item" src={require("@images/logo-light.svg").default} alt="logo"/>
                     </Link>
 
-                    <button className={`navbar-toggler ms-auto ms-sm-0 p-0 p-sm-2 ${openedNavMenu ? '' : 'collapsed'}`} type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded={`${openedNavMenu ? 'true':'false'}`} aria-label="Toggle navigation" onClick={onClickNavMenu}>
+                    <button className={`navbar-toggler ms-auto ms-sm-0 p-0 p-sm-2 ${openedNavMenu ? '' : 'collapsed'} ${showNavButtons ? '' : ' ms-sm-auto'}`} type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded={`${openedNavMenu ? 'true':'false'}`} aria-label="Toggle navigation" onClick={onClickNavMenu}>
                         <span className="navbar-toggler-animation" style={{marginRight:5}}>
                             <span></span>
                             <span></span>
@@ -54,10 +55,13 @@ const Header = ({scroll, showNavButtons} : PropType) => {
                         </span>
                         <span className="d-none d-sm-inline-block small">Menu</span>
                     </button>
-
-                    <button className={`navbar-toggler ms-sm-auto mx-3 me-md-0 p-0 p-sm-2 ${openedNavMenuRight ? '' : 'collapsed'}`} type="button" data-bs-toggle="collapse" data-bs-target="#navbarCategoryCollapse" aria-controls="navbarCategoryCollapse" aria-expanded={`${openedNavMenuRight ? 'true':'false'}`} aria-label="Toggle navigation" onClick={onClickNavMenu2}>
-                        <i className="bi bi-grid-3x3-gap-fill fa-fw"></i><span className="d-none d-sm-inline-block small">Category</span>
-                    </button>
+                    {
+                        showNavButtons === true && (
+                            <button className={`navbar-toggler ms-sm-auto mx-3 me-md-0 p-0 p-sm-2 ${openedNavMenuRight ? '' : 'collapsed'}`} type="button" data-bs-toggle="collapse" data-bs-target="#navbarCategoryCollapse" aria-controls="navbarCategoryCollapse" aria-expanded={`${openedNavMenuRight ? 'true':'false'}`} aria-label="Toggle navigation" onClick={onClickNavMenu2}>
+                                <i className="bi bi-grid-3x3-gap-fill fa-fw"></i><span className="d-none d-sm-inline-block small">Category</span>
+                            </button>
+                        )
+                    }
 
                     <Navbar expand="lg" className={`navbar-collapse collapse ${openedNavMenu ? 'show' : ''}`}>
                         {/* <Navbar.Toggle aria-controls="basic-navbar-nav" id="basic-navbar-toggle-button" /> */}

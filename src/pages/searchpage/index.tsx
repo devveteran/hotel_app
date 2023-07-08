@@ -7,8 +7,11 @@ import './searchpage.scss';
 import Footer from "@containers/common/footer";
 import GoogleMapReact from 'google-map-react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMap, faMapLocation, faMapMarked, faMapMarkedAlt, faMapMarker, faMapMarkerAlt, faSlidersH } from "@fortawesome/free-solid-svg-icons";
+import { faMapMarkerAlt, faSlidersH } from "@fortawesome/free-solid-svg-icons";
+import ReactSlider from 'react-slider';
 
+const MIN_PRICE = 500
+const MAX_PRICE = 2000
 const SearchPage = () => {
     const [scroll, setScroll] = useState(false);
     const [showSearchPanel, setShowSearchPanel] = useState(false);
@@ -17,6 +20,8 @@ const SearchPage = () => {
     const [visibleToggleButton, setVisibleToggleButton] = useState(false);
     const [viewMode, setViewMode] = useState<string>('list');
     const [showMap, setShowMap] = useState<boolean>(false);
+    const [minPrice, setMinPrice] = useState<string>(MIN_PRICE.toFixed(2));
+    const [maxPrice, setMaxPrice] = useState<string>(MAX_PRICE.toFixed(2));
 
     const toggleMap = () => {
         setShowMap(!showMap);
@@ -34,6 +39,14 @@ const SearchPage = () => {
         }
     }
 
+    const onChangePriceRange = (value: Array<number>, index: number) => {
+        let minval = value[0];
+        let maxval = value[1];
+        if (index === 0)
+            setMinPrice(minval.toFixed(2));
+        else if (index === 1)
+            setMaxPrice(maxval.toFixed(2));
+    }
     const onClickScrollToTop = () => {
         window.scrollTo({top:0, behavior:'smooth'});
     }
@@ -95,12 +108,12 @@ const SearchPage = () => {
                     <div className={`row ${viewMode==='list' ? 'mb-4': ''}`}>
                         <div className='col-12'>
                             <div className={`${'d-flex justify-content-end'}`}>
-                                <button ref={refButtonToggle} className={`${'btn btn-primary-soft btn-primary-check mb-0'} `} type="button" onClick={toggleSearchPanel}>
+                                <label ref={refButtonToggle} className={`${'btn btn-primary-soft btn-primary-check mb-0'} ${showSearchPanel ? 'active':''}`} onClick={toggleSearchPanel}>
                                     <FontAwesomeIcon icon={faSlidersH}/> Show filters
-                                </button>
-                                <button ref={refButtonToggle} className={`${'btn btn-primary-soft btn-primary-check mb-0 ms-4'} `} type="button" onClick={toggleMap}>
+                                </label>
+                                <label ref={refButtonToggle} className={`${'btn btn-primary-soft btn-primary-check mb-0 ms-4'} ${showMap ? 'active':''}`} onClick={toggleMap}>
                                     <FontAwesomeIcon icon={faMapMarkerAlt} /> Show Map
-                                </button>
+                                </label>
                                 <ul className="nav nav-pills nav-pills-dark d-none" id="tour-pills-tab" role="tablist">
                                     <li className="nav-item">
                                         <a className={`nav-link rounded-start rounded-0 mb-0 ${viewMode==='list' ? 'active':''}`}  onClick={() => toggleViewMode('list')}><i className="bi fa-fw bi-list-ul"></i></a>
@@ -113,7 +126,7 @@ const SearchPage = () => {
                         </div>
                     </div>
                     <div className={`row mb-4 ${showSearchPanel === true ? '' : 'd-none'}`}>
-                        <div className={`collapse show`} id="collapseFilter" >
+                        <div>
                             <div className="card card-body bg-light p-4 z-index-9">
                                 <form className="row g-4">
                                     <div className="col-md-6 col-lg-4">
@@ -127,11 +140,23 @@ const SearchPage = () => {
                                         <div className="form-control-borderless">
                                             <label className="form-label">Price Range</label>
                                             <div className="position-relative">
-                                                <div className="noui-wrapper">
+                                                <div className='noui-wrapper'>
                                                     <div className="d-flex justify-content-between">
-                                                        <input type="text" className="text-body input-with-range-min"/>
-                                                        <input type="text" className="text-body input-with-range-max"/>
+                                                        <input type="text" className="text-body input-with-range-min" value={minPrice} readOnly={true}/>
+                                                        <input type="text" className="text-body input-with-range-max" value={maxPrice} readOnly={true}/>
                                                     </div>
+                                                    <ReactSlider
+                                                        className="price-slider mt-2"
+                                                        thumbClassName="price-thumb"
+                                                        trackClassName="price-track"
+                                                        defaultValue={[MIN_PRICE, MAX_PRICE]}
+                                                        min={MIN_PRICE}
+                                                        max={MAX_PRICE}
+                                                        onChange={(v:Array<number>, i: number) => onChangePriceRange(v, i)}
+                                                        ariaLabelledby={['first-slider-label', 'second-slider-label']}
+                                                        ariaValuetext={(state:any) => `Thumb value ${state.valueNow}`}
+                                                        minDistance={100}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -329,7 +354,7 @@ const SearchPage = () => {
                     {/* {
                         viewMode === 'list' ? ( */}
                     <div className='row'>
-                        <div className={`${showMap === true ? 'col-xl-7 col-xxl-7' : ''}`}>
+                        <div className={`${showMap === true ? 'col-md-7' : ''}`}>
                             <div className='vstack gap-4'>
                                 <HotelItemCard viewMode="list"/>
                                 <HotelItemCard viewMode="list"/>
@@ -341,15 +366,15 @@ const SearchPage = () => {
                                 <HotelItemCard viewMode="list"/>
                             </div>
                         </div>
-                        <div className={`${showMap === true ? 'col-xl-5 col-xxl-5 d-none d-xl-block d-xxl-block' : 'd-none'} map-wrapper`}>
+                        <div className={`${showMap === true ? 'p-0 col-md-5 d-none d-md-block' : 'd-none'} map-wrapper rounded-2`}>
                             {/* <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d198588.45780654624!2d114.16793527669192!3d22.351972730953253!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sde!2shk!4v1688759358712!5m2!1sde!2shk" width="100%" height="100%"  */}
                             {/* style={{border:'0'}} allowFullScreen={false} loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe> */}
                             <GoogleMapReact
                                 bootstrapURLKeys={{ key: "" }}
                                 // yesIWantToUseGoogleMapApiInternals
                                 defaultCenter={{
-                                    lat: 10.99835602,
-                                    lng: 77.01502627
+                                    lat: 30.99835602,
+                                    lng: 47.01502627
                                 }}
                                 defaultZoom={11}
                             >

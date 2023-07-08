@@ -8,3 +8,46 @@
     height: calc(100vh - 64px);
     top: 64px;
 }
+
+.price-slider {
+    width: 100%;
+    max-width: 500px;
+    height: 5px;
+}
+
+.price-slider .price-track {
+    height: 5px;
+    background: rgba(var(--bs-primary-rgb), 0.1);
+    transform: translateY(-50%);
+    top: 50%;    
+}
+.price-slider .price-thumb {
+    top: 1px;
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    text-align: center;
+    background-color: var(--bs-primary);
+    color: white;
+    cursor: pointer;
+    border: 5px solid white !important;
+    box-sizing: border-box;
+    transform: translateY(-50%);
+    top: 50%;
+    outline: none;
+}
+
+.price-track.price-track-1 {
+    background: var(--bs-primary);
+}
+.price-thumb:before {
+    border: 1px solid var(--bs-primary);
+    width: calc(100% + 10px);
+    height: calc(100% + 10px);
+    visibility: visible;
+    content: "";
+    position: absolute;
+    border-radius: 100%;
+    left: -5px;
+    top: -5px;
+}
