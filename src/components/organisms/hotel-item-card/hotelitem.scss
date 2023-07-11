@@ -15,3 +15,27 @@
 .hotel-item-card .react-multi-carousel-item {
     padding: 0 3px;
 }
+.hotel-card-image {
+    max-width: 230px !important;
+}
+@media (max-width: 767px) {
+    .hotel-card-image {
+        max-width: 100% !important;
+        max-height: 200px !important;
+    }   
+    .hotel-card-image .tiny-slider {
+        max-height: 200px !important;
+    }
+    .hotel-card-image .tiny-slider img {
+        max-height: 200px;
+        object-fit: cover !important;
+        width: 100%;
+    }
+}
+.other-price {
+    background-color: var(--bs-gray-100) !important;
+    border-color: var(--bs-gray-100) !important;
+}
+.other-price-div {
+    max-width: 250px !important;
+}

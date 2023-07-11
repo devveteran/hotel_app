@@ -7,12 +7,17 @@ import { useState } from 'react';
 
 const SearchBar = () => {
     const [selectedLocation, setSelectedLocation] = useState<string>("");
-    const [selectedDate, setSelectedDate] = useState(Date());
-    const [showGuestMenu, setShowGuestMenu] = useState<boolean>(false);
+    
+    const [dateCheckin, setDateCheckin] = useState<string>("");
+    const [dateCheckout, setDateCheckout] = useState<string>("");
 
     const [adultNum, setAdultNum] = useState(0);
     const [childNum, setChildNum] = useState(0);
     const [roomNum, setRoomNum] = useState(0);
+
+    const getURLParam = () => {
+        return window.btoa(selectedLocation + '_' + dateCheckin + '_' + dateCheckout + '_' + adultNum + '_' + childNum + '_' + roomNum);
+    }
 
     const increaseAdult = (e: any, v:number) => {
         e.preventDefault();
@@ -62,6 +67,7 @@ const SearchBar = () => {
                                             label: 'West Virginia, Paris'
                                         }]}
                                         onSelect={(value:any) => {
+                                            console.log(value);
                                             setSelectedLocation(value);
                                         }}
                                         listMaxHeight={200} //by default 140
@@ -80,8 +86,21 @@ const SearchBar = () => {
                                     placeholder="Select date"
                                     className="form-control flatpickr flatpickr-input"
                                     options={{mode:'range', dateFormat:'d M', enableTime:false}}
-                                    onChange={(date : any) => {
-                                        console.log(date);
+                                    onChange={(data : Array<Date>) => {
+                                        if (data.length === 2){
+                                            let datefrom: Date = data[0];
+                                            let year1 = datefrom.getUTCFullYear();
+                                            let month1 = datefrom.getUTCMonth();
+                                            let date1 = datefrom.getUTCDate();
+
+                                            let dateto: Date = data[1];
+                                            let year2 = dateto.getUTCFullYear();
+                                            let month2 = dateto.getUTCMonth();
+                                            let date2 = dateto.getUTCDate();
+                                            
+                                            setDateCheckin(`${year1}-${month1}-${date1}`);
+                                            setDateCheckout(`${year2}-${month2}-${date2}`);
+                                        }                                        
                                     }}
                                 />                                                
                             </div>
@@ -156,7 +175,7 @@ const SearchBar = () => {
                     </div>
                 </div>
                 <div className="btn-position-md-middle">
-                    <Link to={'/search'} className="icon-lg btn btn-round btn-primary mb-0">
+                    <Link to={`/search/${getURLParam()}`} className="icon-lg btn btn-round btn-primary mb-0">
                         <i className="bi bi-search fa-fw"></i>
                     </Link>
                 </div>

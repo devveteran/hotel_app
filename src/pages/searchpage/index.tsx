@@ -9,25 +9,73 @@ import GoogleMapReact from 'google-map-react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarkerAlt, faSlidersH } from "@fortawesome/free-solid-svg-icons";
 import ReactSlider from 'react-slider';
+import { Dropdown } from "react-bootstrap";
+import { randomInt } from "crypto";
+import { useParams, useSearchParams } from "react-router-dom";
+
+export interface MapViewState {
+    show: boolean,
+    lat: number,
+    lon: number
+};
+export const initialMapViewState = {
+    show: false,
+    lat: 10,
+    lon: 10,
+}
 
 const MIN_PRICE = 500
 const MAX_PRICE = 2000
-const SearchPage = () => {
+const SearchPage = () => { 
+    const paramsURL = useParams();
+    let params = "___0_0_0";
+    if (Object.keys(paramsURL).length > 0) {
+        params = window.atob(paramsURL.param || '');
+    }
+    let aryparams = params?.split('_');
+
+    const [selectedLocation, setSelectedLocation] = useState<string>(aryparams[0]);
+    const [dateCheckin, setDateCheckin] = useState<string>(aryparams[1]);
+    const [dateCheckout, setDateCheckout] = useState<string>(aryparams[2]);
+    const [adultNum, setAdultNum] = useState(aryparams[3]);
+    const [childNum, setChildNum] = useState(aryparams[4]);
+    const [roomNum, setRoomNum] = useState(aryparams[5]);
+
     const [scroll, setScroll] = useState(false);
     const [showSearchPanel, setShowSearchPanel] = useState(false);
     const refPanel = useRef<any>(null);
     const refButtonToggle = useRef<any>(null);
     const [visibleToggleButton, setVisibleToggleButton] = useState(false);
     const [viewMode, setViewMode] = useState<string>('list');
-    const [showMap, setShowMap] = useState<boolean>(false);
+    const [mapState, setMapState] = useState<MapViewState>(initialMapViewState);
     const [minPrice, setMinPrice] = useState<string>(MIN_PRICE.toFixed(2));
     const [maxPrice, setMaxPrice] = useState<string>(MAX_PRICE.toFixed(2));
+    const [searchFilter, setSearchFilter] = useState<string>('Select Option');
+    const [hotelTypeFilter, setHotelTypeFilter] = useState<string>('Select Option');
+    const refMap = useRef(null);
 
+    const onSelectHotelType = ( v: string ) => {
+        setHotelTypeFilter(v);
+    }
+
+    const onSelectFilter = (v: string) => {
+        setSearchFilter(v);
+    }
     const toggleMap = () => {
-        setShowMap(!showMap);
+        let tmp_mapState = {...mapState};
+        tmp_mapState.show = !tmp_mapState.show;
+        setMapState(tmp_mapState);
     }
     const toggleSearchPanel = () => {
         setShowSearchPanel(!showSearchPanel);
+    }
+
+    const viewMap = (v: MapViewState) => {
+        let tv = {...v};
+        setMapState(tv);
+        if (v.show && refMap.current !== null) {
+            
+        }
     }
 
     const toggleViewMode = (v: string) => {
@@ -64,40 +112,40 @@ const SearchPage = () => {
         }
     }, [scroll, setScroll]);
 
-    useLayoutEffect(() => {
-        function updateSize() {
-            const display = window.getComputedStyle(refButtonToggle.current).getPropertyValue("display");
+    // useLayoutEffect(() => {
+    //     function updateSize() {
+    //         const display = window.getComputedStyle(refButtonToggle.current).getPropertyValue("display");
             
-            if (viewMode === 'list') {
-                if (display !== 'none'){
-                    setVisibleToggleButton(true);
-                    setShowSearchPanel(false);
-                }
-                else{
-                    setVisibleToggleButton(false);
-                    setShowSearchPanel(true);
-                }
-            }
-        }
-        window.addEventListener('resize', updateSize);
-        updateSize();
-        return () => window.removeEventListener('resize', updateSize);
-    }, []);
+    //         if (viewMode === 'list') {
+    //             if (display !== 'none'){
+    //                 setVisibleToggleButton(true);
+    //                 setShowSearchPanel(false);
+    //             }
+    //             else{
+    //                 setVisibleToggleButton(false);
+    //                 setShowSearchPanel(true);
+    //             }
+    //         }
+    //     }
+    //     window.addEventListener('resize', updateSize);
+    //     updateSize();
+    //     return () => window.removeEventListener('resize', updateSize);
+    // }, []);
 
-    useEffect(() => {
-        function handleClickOutside(event: any) {
-            if (refButtonToggle.current.contains(event.target))
-                return;
-            if (refPanel.current && !refPanel.current.contains(event.target)) {
-                if(visibleToggleButton)
-                    setShowSearchPanel(false);
-            }
-        }
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    });
+    // useEffect(() => {
+    //     function handleClickOutside(event: any) {
+    //         if (refButtonToggle.current.contains(event.target))
+    //             return;
+    //         if (refPanel.current && !refPanel.current.contains(event.target)) {
+    //             if(visibleToggleButton)
+    //                 setShowSearchPanel(false);
+    //         }
+    //     }
+    //     document.addEventListener("mousedown", handleClickOutside);
+    //     return () => {
+    //         document.removeEventListener("mousedown", handleClickOutside);
+    //     };
+    // });
 
     return (
         <div className="home-view"> 
@@ -111,7 +159,7 @@ const SearchPage = () => {
                                 <label ref={refButtonToggle} className={`${'btn btn-primary-soft btn-primary-check mb-0'} ${showSearchPanel ? 'active':''}`} onClick={toggleSearchPanel}>
                                     <FontAwesomeIcon icon={faSlidersH}/> Show filters
                                 </label>
-                                <label ref={refButtonToggle} className={`${'btn btn-primary-soft btn-primary-check mb-0 ms-4'} ${showMap ? 'active':''}`} onClick={toggleMap}>
+                                <label ref={refButtonToggle} className={`${'btn btn-primary-soft btn-primary-check mb-0 ms-4'} ${mapState.show ? 'active':''}`} onClick={toggleMap}>
                                     <FontAwesomeIcon icon={faMapMarkerAlt} /> Show Map
                                 </label>
                                 <ul className="nav nav-pills nav-pills-dark d-none" id="tour-pills-tab" role="tablist">
@@ -165,6 +213,32 @@ const SearchPage = () => {
                                     <div className="col-md-6 col-lg-4">
                                         <div className="form-size-lg form-control-borderless">
                                             <label className="form-label">Popular Filters</label>
+                                            <Dropdown className="custom-selector me-2">
+                                                <Dropdown.Toggle id="select-filter-button" variant="link" className="custom-dropdown-button form-control form-control-lg" 
+                                                    style={{textAlign:'left'}}>
+                                                    {
+                                                        searchFilter === 'Select Option' ?
+                                                        (
+                                                            <span className='no-select'>{searchFilter}</span>
+                                                        ) : <span>{searchFilter}</span>
+                                                    }
+                                                </Dropdown.Toggle>
+
+                                                <Dropdown.Menu className="custom-dropdown-menu filter-selector-dropdown">
+                                                    <Dropdown.Item className="d-flex justify-content-between" onClick={() => onSelectFilter('Select Option')} style={{color:'var(--bs-gray-400)'}}>
+                                                        Select Option
+                                                    </Dropdown.Item>
+                                                    <Dropdown.Item className="d-flex justify-content-between" onClick={() => onSelectFilter('Recently Search')}>
+                                                        Recently Search
+                                                    </Dropdown.Item>
+                                                    <Dropdown.Item className="d-flex justify-content-between" onClick={() => onSelectFilter('Most Popular')}>
+                                                        Most Popular
+                                                    </Dropdown.Item>
+                                                    <Dropdown.Item className="d-flex justify-content-between" onClick={() => onSelectFilter('Top rated')}>
+                                                        Top rated
+                                                    </Dropdown.Item>
+                                                </Dropdown.Menu>
+                                            </Dropdown>
                                         </div>
                                     </div>
 
@@ -223,6 +297,32 @@ const SearchPage = () => {
                                     <div className="col-md-6 col-lg-4">
                                         <div className="form-size-lg form-control-borderless">
                                             <label className="form-label">Hotel Type</label>
+                                            <Dropdown className="custom-selector me-2">
+                                                <Dropdown.Toggle id="select-filter-button" variant="link" className="custom-dropdown-button form-control form-control-lg" 
+                                                    style={{textAlign:'left'}}>
+                                                    {
+                                                        hotelTypeFilter === 'Select Option' ?
+                                                        (
+                                                            <span className='no-select'>{hotelTypeFilter}</span>
+                                                        ) : <span>{hotelTypeFilter}</span>
+                                                    }
+                                                </Dropdown.Toggle>
+
+                                                <Dropdown.Menu className="custom-dropdown-menu filter-selector-dropdown">
+                                                    <Dropdown.Item className="d-flex justify-content-between" onClick={() => onSelectHotelType('Select Option')} style={{color:'var(--bs-gray-400)'}}>
+                                                        Select Option
+                                                    </Dropdown.Item>
+                                                    <Dropdown.Item className="d-flex justify-content-between" onClick={() => onSelectHotelType('Free Cancellation Available')}>
+                                                        Free Cancellation Available
+                                                    </Dropdown.Item>
+                                                    <Dropdown.Item className="d-flex justify-content-between" onClick={() => onSelectHotelType('Pay At Hotel Available')}>
+                                                        Pay At Hotel Available
+                                                    </Dropdown.Item>
+                                                    <Dropdown.Item className="d-flex justify-content-between" onClick={() => onSelectHotelType('Free Breakfast Included')}>
+                                                        Free Breakfast Included
+                                                    </Dropdown.Item>
+                                                </Dropdown.Menu>
+                                            </Dropdown>                                            
                                         </div>
                                     </div>
 
@@ -350,41 +450,43 @@ const SearchPage = () => {
                         </div>
                     </div>
                 </div>
-                <div className={`${showMap===true ? 'container-fluid' : 'container'}  ${viewMode==='list' ? '' : 'position-relative'}`}>
+                <div className={`${mapState.show===true ? 'container-fluid' : 'container'}  ${viewMode==='list' ? '' : 'position-relative'}`}>
                     {/* {
                         viewMode === 'list' ? ( */}
                     <div className='row'>
-                        <div className={`${showMap === true ? 'col-md-7' : ''}`}>
+                        <div className={`${mapState.show === true ? 'col-md-7' : ''}`}>
                             <div className='vstack gap-4'>
-                                <HotelItemCard viewMode="list"/>
-                                <HotelItemCard viewMode="list"/>
-                                <HotelItemCard viewMode="list"/>
-                                <HotelItemCard viewMode="list"/>
-                                <HotelItemCard viewMode="list"/>
-                                <HotelItemCard viewMode="list"/>
-                                <HotelItemCard viewMode="list"/>
-                                <HotelItemCard viewMode="list"/>
+                                {
+                                    [1,2,3,4,5,6,7,8].map((v, i) => {
+                                        return (<HotelItemCard 
+                                        key={i}
+                                        viewMode="list"
+                                        images={["@images/category/hotel/4by3/03.jpg", "@images/category/hotel/4by3/03.jpg"]}
+                                        rate={4} 
+                                        title={"Courtyard by Marriott New York"} 
+                                        viewMap={viewMap} 
+                                        lat={10 + 10 * i} 
+                                        lon={38}
+                                        reviewRate={4.8} 
+                                        reviewCnt={502}/>)
+                                    })
+                                }
                             </div>
                         </div>
-                        <div className={`${showMap === true ? 'p-0 col-md-5 d-none d-md-block' : 'd-none'} map-wrapper rounded-2`}>
-                            {/* <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d198588.45780654624!2d114.16793527669192!3d22.351972730953253!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sde!2shk!4v1688759358712!5m2!1sde!2shk" width="100%" height="100%"  */}
-                            {/* style={{border:'0'}} allowFullScreen={false} loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe> */}
+                        <div className={`${mapState.show === true ? 'p-0 col-md-5 d-none d-md-block' : 'd-none'} map-wrapper rounded-2`}>
                             <GoogleMapReact
+                                ref={refMap}
+                                center={{
+                                    lat: mapState.lat,
+                                    lng: mapState.lon
+                                }}
                                 bootstrapURLKeys={{ key: "" }}
                                 // yesIWantToUseGoogleMapApiInternals
-                                defaultCenter={{
-                                    lat: 30.99835602,
-                                    lng: 47.01502627
-                                }}
                                 defaultZoom={11}
                             >
                             </GoogleMapReact>
                         </div>
                     </div>
-                        {/* ) : (
-
-                        )
-                    } */}
                 </div>
             </section>
 

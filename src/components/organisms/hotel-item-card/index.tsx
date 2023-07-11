@@ -1,9 +1,13 @@
-import { faHeart, faShareAlt, faStar, faStarHalfAlt } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faHeartSolid, faShareAlt, faStar, faStarHalfAlt } from "@fortawesome/free-solid-svg-icons";
+import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import styles from './hotelitem.module.scss';
 import './hotelitem.scss';
+import { useState } from "react";
+import DetailView from "@containers/searchpage/detailview";
+import { MapViewState } from "src/pages/searchpage";
 
 const responsive = {
     desktop: {
@@ -24,20 +28,47 @@ const responsive = {
 };
 interface PropType {
     viewMode: string;
+    images: Array<string>,
+    rate: number,
+    title: string,
+    viewMap: (v: MapViewState) => void,
+    lat: number,
+    lon: number,
+    reviewRate: number,
+    reviewCnt: number
 }
-const HotelItemCard = ({viewMode}: PropType) => 
+const HotelItemCard = ({viewMode, images, rate, title, viewMap, lat, lon, reviewRate, reviewCnt}: PropType) => 
 {
+    const [detailTab, setDetailTab] = useState<string>('');
+    const viewDetail = (v: string) => {
+        if (detailTab === '')
+            setDetailTab(v);
+        else
+            setDetailTab('');
+    }
+    let starRates: Array<any> = [];
+    for(let i = 0; i<Math.trunc(rate); i++) {
+        starRates.push (<li key={`star${i+1}`} className="list-inline-item me-0 small">
+                        <FontAwesomeIcon icon={faStar} className='text-warning'/>
+                    </li>)
+    }
+    if (Math.trunc(rate) < rate) {
+        starRates.push (<li key={`starlast`} className="list-inline-item me-0 small">
+                        <FontAwesomeIcon icon={faStarHalfAlt} className='text-warning'/>
+                    </li>)
+    }
+
     return viewMode === 'list' ? (
-                <div className="card shadow p-2 hotel-item-card">
-                    <div className="row g-0">
-                        <div className="col-md-5 position-relative" >
-                            <div className="position-absolute top-0 start-0 z-index-1 m-2">
+                <div className="card shadow p-0 hotel-item-card" style={{cursor:'pointer'}}>
+                    <div className="row g-0 flex-column flex-xxl-row flex-lg-row flex-xl-row flex-md-row pe-2">
+                        <div className="position-relative hotel-card-image">
+                            {/* <div className="position-absolute top-0 start-0 z-index-1 m-2">
                                 <div className="badge text-bg-danger">30% Off</div>
-                            </div>
-                            <div className="tiny-slider arrow-round arrow-xs arrow-dark overflow-hidden rounded-2">
-                                <div className="tns-outer" id="tns1-ow">
+                            </div> */}
+                            <div className="tiny-slider arrow-round arrow-xs arrow-dark overflow-hidden">
+                                <div className="tns-outer">
                                     <Carousel
-                                        className={`tns-ovh `}
+                                        className={`tns-ovh`}
                                         swipeable={true}
                                         draggable={true}
                                         showDots={false}
@@ -50,61 +81,38 @@ const HotelItemCard = ({viewMode}: PropType) =>
                                         removeArrowOnDeviceType={["tablet", "mobile"]}
                                         rewind={true}
                                     >
-                                        <div className="tns-item tns-slide-cloned rounded-2" aria-hidden="true" tabIndex={-1}>
-                                            <img src={require("@images/category/hotel/4by3/03.jpg")} alt="Card image"/>
-                                        </div>
-                                        <div className="tns-item tns-slide-active rounded-2" id="tns1-item0">
-                                            <img src={require("@images/category/hotel/4by3/03.jpg")} alt="Card image"/>
-                                        </div>
-        
-                                        <div className="tns-item rounded-2" id="tns1-item1" aria-hidden="true" tabIndex={-1}>
-                                            <img src={require("@images/category/hotel/4by3/03.jpg")} alt="Card image"/>
-                                        </div>
-        
-                                        <div className="tns-item rounded-2" id="tns1-item2" aria-hidden="true" tabIndex={-1}>
-                                            <img src={require("@images/category/hotel/4by3/03.jpg")} alt="Card image"/>
-                                        </div>
-        
-                                        <div className="tns-item rounded-2" id="tns1-item3" aria-hidden="true" tabIndex={-1}>
-                                            <img src={require("@images/category/hotel/4by3/03.jpg")} alt="Card image"/>
-                                        </div>
-                                        
-                                        <div className="tns-item tns-slide-cloned rounded-2" aria-hidden="true" tabIndex={-1}>
-                                            <img src={require("@images/category/hotel/4by3/03.jpg")} alt="Card image"/>
-                                        </div>
+                                        {
+                                            images.map((v, i) => {
+                                                return (
+                                                    <div key={i} className="tns-item tns-slide-cloned rounded-2" aria-hidden="true" tabIndex={-1} 
+                                                        onClick={() => viewDetail('image')}>
+                                                        <img src={require("@images/category/hotel/4by3/03.jpg")} alt="Card image" />
+                                                    </div>
+                                                )
+                                            })
+                                        }
                                     </Carousel>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-7">
+                        <div className="col">
                             <div className="card-body py-md-2 d-flex flex-column h-100 position-relative">
                                 <div className="d-flex justify-content-between align-items-center">
-                                    <ul className="list-inline mb-0">
-                                        <li className="list-inline-item me-0 small">
-                                            <FontAwesomeIcon icon={faStar} className='text-warning'/>
-                                        </li>
-                                        <li className="list-inline-item me-0 small">
-                                            <FontAwesomeIcon icon={faStar} className='text-warning'/>
-                                        </li>
-                                        <li className="list-inline-item me-0 small">
-                                            <FontAwesomeIcon icon={faStar} className='text-warning'/>
-                                        </li>
-                                        <li className="list-inline-item me-0 small">
-                                            <FontAwesomeIcon icon={faStar} className='text-warning'/>
-                                        </li>
-                                        <li className="list-inline-item me-0 small">
-                                            <FontAwesomeIcon icon={faStarHalfAlt} className='text-warning'/>
-                                        </li>
+                                    <ul className="list-inline mb-0" onClick={() => viewDetail('info')}>
+                                        {
+                                            starRates.map((ele, i) => {
+                                                return ele;
+                                            })
+                                        }
                                     </ul>
         
                                     <ul className="list-inline mb-0 z-index-2">
                                         <li className="list-inline-item">
                                             <a href="#" className="btn btn-sm btn-round btn-light">
-                                                {/* <i className="fa-solid fa-fw fa-heart"></i> */}
                                                 <FontAwesomeIcon icon={faHeart} fontSize={'0.6rem'}/>
                                             </a>
                                         </li>
-                                        <li className="list-inline-item dropdown">
+                                        {/* <li className="list-inline-item dropdown">
                                             <a href="#" className="btn btn-sm btn-round btn-light" role="button" id="dropdownShare" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i className="fa-solid fa-fw fa-share-alt"></i>
                                                 <FontAwesomeIcon icon={faShareAlt} fontSize={'0.6rem'}/>
@@ -115,29 +123,42 @@ const HotelItemCard = ({viewMode}: PropType) =>
                                                 <li><a className="dropdown-item" href="#"><i className="fab fa-linkedin me-2"></i>LinkedIn</a></li>
                                                 <li><a className="dropdown-item" href="#"><i className="fa-solid fa-copy me-2"></i>Copy link</a></li>
                                             </ul>
-                                        </li>
+                                        </li> */}
                                     </ul>
                                 </div>
         
-                                <h5 className="card-title mb-1"><a href="hotel-detail.html">Courtyard by Marriott New York </a></h5>
-                                <small><i className="bi bi-geo-alt me-2"></i>5855 W Century Blvd, Los Angeles - 90045</small>
+                                <h6 className="card-title mb-1"><a onClick={() => viewDetail('overview')}>{title}</a></h6>
+                                <small onClick={() => viewMap({show:true, lat:lat, lon:lon})}><i className="bi bi-geo-alt me-2"></i>5855 W Century Blvd, Los Angeles - 90045</small>
                                 <ul className="nav nav-divider mt-3">
+                                    <li className="nav-item">
+                                        <b style={{color:'var(--bs-gray-900)'}}>
+                                        {reviewRate}
+                                        {
+                                            reviewRate >=4.5 ? ' - Excellent' : 
+                                                reviewRate >=4 ? ' - Very Good' :
+                                                    reviewRate >= 3.5 ? ' - Good' :
+                                                        reviewRate >= 3 ? '' : ''
+                                        }
+                                        </b> ({reviewCnt} reviews)
+                                    </li>
+                                </ul>
+                                {/* <ul className="nav nav-divider mt-3">
                                     <li className="nav-item">Air Conditioning</li>
                                     <li className="nav-item">Wifi</li>
                                     <li className="nav-item">Kitchen</li>
                                     <li className="nav-item"><a href="#" className="mb-0 text-primary">More+</a></li>
-                                </ul>
+                                </ul> */}
         
-                                <ul className="list-group list-group-borderless small mb-0 mt-2">
+                                {/* <ul className="list-group list-group-borderless small mb-0 mt-2">
                                     <li className="list-group-item d-flex text-success p-0">
                                         <i className="bi bi-patch-check-fill me-2"></i>Free Cancellation till 7 Jan 2022
                                     </li>
                                     <li className="list-group-item d-flex text-success p-0">
                                         <i className="bi bi-patch-check-fill me-2"></i>Free Breakfast
                                     </li>
-                                </ul>
+                                </ul> */}
                                 
-                                <div className="d-sm-flex justify-content-sm-between align-items-center mt-3 mt-md-auto">
+                                {/* <div className="d-sm-flex justify-content-sm-between align-items-center mt-3 mt-md-auto">
                                     <div className="d-flex align-items-center">
                                         <h5 className="fw-bold mb-0 me-1">$750</h5>
                                         <span className="mb-0 me-2">/day</span>
@@ -145,20 +166,45 @@ const HotelItemCard = ({viewMode}: PropType) =>
                                     </div>
                                     <div className="mt-3 mt-sm-0">
                                         <a href="#" className="btn btn-sm btn-dark mb-0 w-100">Select Room</a>    
-                                    </div>                  
+                                    </div>
+                                </div> */}
+                            </div>
+                        </div>
+                        <div className="col other-price-div">
+                            <div className='d-flex rounded-2 flex-column h-100 p-2 justify-content-between'>
+                                <div className='d-flex flex-row align-items-center h-50'>
+                                    <h5 className="fw-bold mb-0 me-1 col ps-0">$750</h5>
+                                    <button className='btn btn-primary m-auto me-0 pt-1 pb-1'>View Deal {'>'}</button>
+                                </div>
+                                <div className='d-flex flex-row align-items-center justify-content-between gap-1 mt-2'>
+                                    <div className='col-md-5 rounded-2 p-1 ps-2 other-price'>
+                                        <span style={{fontSize:'0.8rem'}}>Expedia</span>
+                                        <h6 className='mb-0'>$110</h6>
+                                    </div>
+                                    <div className='col-md-7 rounded-2 p-1 ps-2 other-price'>
+                                        <span style={{fontSize:'0.8rem'}}>Our lowest price</span>
+                                        <h6 className='mb-0'>$110</h6>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    {
+                        detailTab !== '' ? (
+                            <div className='row'>
+                                <DetailView selectedTab={detailTab} />
+                            </div>
+                        ) : null
+                    }
+                    
                 </div>
             ) : (
                 <div className="card shadow p-2 pb-0 h-100 hotel-item-card">
-					<div className="position-absolute top-0 start-0 z-index-1 m-4">
+					{/* <div className="position-absolute top-0 start-0 z-index-1 m-4">
 						<div className="badge bg-danger text-white">30% Off</div>
-					</div>
-
+					</div> */}
 					<div className="tiny-slider arrow-round arrow-xs arrow-dark rounded-2 overflow-hidden">
-						<div className="tns-outer" id="tns1-ow">
+						<div className="tns-outer">
                             <Carousel
                                 className={`tns-ovh `}
                                 swipeable={true}

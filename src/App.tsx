@@ -2,6 +2,7 @@ import './App.scss';
 import Home from './pages/home';
 import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
 import SearchPage from './pages/searchpage';
 
 export const insertScript = (scriptToAdd: string) => {
@@ -38,8 +39,8 @@ function App() {
     <BrowserRouter>
     {/* basename={process.env.PUBLIC_URL} */}
       <Routes>
-        <Route path="/" Component={() => <Home/>} />
-        <Route path="/search" Component={() => <SearchPage />} />
+        <Route path="/" element={<Home/>} />
+        <Route path='/search/:param?' element={<SearchPage />} />
       </Routes>
     </BrowserRouter>
   );

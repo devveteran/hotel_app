@@ -21,6 +21,7 @@
     "@types/node": "^16.7.13",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "Buffer": "^0.0.0",
     "antd": "^5.6.2",
     "bootstrap": "5.3.0-alpha1",
     "gh-pages": "^5.0.0",
@@ -37,6 +38,7 @@
     "react-scripts": "5.0.1",
     "react-searchable-dropdown": "^2.0.3",
     "react-slider": "^2.0.6",
+    "react-tabs": "^6.0.1",
     "sass": "^1.63.4",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0"
