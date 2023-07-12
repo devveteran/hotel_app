@@ -9,7 +9,8 @@
             "@fonts/*": ["./src/assets/fonts/*"],
             "@services/*": ["./src/services/*"],
             "@store/*": ["./src/store/*"],
-            "@styles/*": ["./src/styles/*"]
+            "@styles/*": ["./src/styles/*"],
+            "@constants/*": ["./src/constants/*"]
         }
     }
 }

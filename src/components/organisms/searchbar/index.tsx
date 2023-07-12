@@ -2,44 +2,48 @@ import Searchable from 'react-searchable-dropdown';
 import "flatpickr/dist/themes/material_green.css";
 import Flatpickr from "react-flatpickr";
 import { Dropdown } from "react-bootstrap";
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSearchParam } from '@store/reducers/global';
+import { RootState } from '@store/index';
+import { SearchParamType } from '@constants/types';
 
 const SearchBar = () => {
-    const [selectedLocation, setSelectedLocation] = useState<string>("");
+    const searchParam = useSelector((state:RootState) => state.global.searchParam);
+    const [localSearchParam, setLocalSearchParam] = useState<SearchParamType>(searchParam);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     
-    const [dateCheckin, setDateCheckin] = useState<string>("");
-    const [dateCheckout, setDateCheckout] = useState<string>("");
+    useEffect( () => {
+        setLocalSearchParam({...searchParam});
+    }, [searchParam]);
 
-    const [adultNum, setAdultNum] = useState(0);
-    const [childNum, setChildNum] = useState(0);
-    const [roomNum, setRoomNum] = useState(0);
-
-    const getURLParam = () => {
-        return window.btoa(selectedLocation + '_' + dateCheckin + '_' + dateCheckout + '_' + adultNum + '_' + childNum + '_' + roomNum);
+    const onSearch = () => {
+        dispatch(setSearchParam(localSearchParam));
+        navigate('/search');
     }
-
     const increaseAdult = (e: any, v:number) => {
         e.preventDefault();
-        if (adultNum + v >= 0)
-            setAdultNum(adultNum + v );
+        if (localSearchParam.adultNum + v >= 0)
+            setLocalSearchParam({...localSearchParam, adultNum: (localSearchParam.adultNum + v) }  );
         else
-            setAdultNum(0);
+            setLocalSearchParam({...localSearchParam, adultNum: 0 }  );
     }
 
     const increaseChild = (e: any, v:number) => {
         e.preventDefault();
-        if (childNum + v >= 0)
-            setChildNum(childNum + v );
+        if (localSearchParam.childNum + v >= 0)
+            setLocalSearchParam({...localSearchParam, childNum: (localSearchParam.childNum + v) } );
         else
-            setChildNum(0);
+            setLocalSearchParam({...localSearchParam, childNum: 0 }  );
     }
     const increaseRoom = (e: any, v:number) => {
         e.preventDefault();
-        if (roomNum + v >= 0)
-            setRoomNum(roomNum + v );
+        if (localSearchParam.roomNum + v >= 0)
+            setLocalSearchParam({...localSearchParam, roomNum: (localSearchParam.roomNum + v) } );
         else
-            setRoomNum(0);
+            setLocalSearchParam({...localSearchParam, roomNum: 0 } );
     }
     return (
         // bg-mode shadow rounded-3 position-relative p-4 pe-md-5 pb-5 pb-md-4 mb-4
@@ -52,7 +56,7 @@ const SearchBar = () => {
                                 <label className="form-label" style={{zIndex:11}}>Location</label>
                                 <div id="selected-location" className="choices" data-type="select-one" tabIndex={0} role="combobox" aria-autocomplete="list" aria-haspopup="true" aria-expanded="false" style={{position:'relative'}}>
                                     <Searchable 
-                                        value={selectedLocation}
+                                        value={localSearchParam.location}
                                         placeholder="Select Location" // by default "Search"
                                         notFoundText="No results found" // by default "No result found"
                                         
@@ -67,8 +71,7 @@ const SearchBar = () => {
                                             label: 'West Virginia, Paris'
                                         }]}
                                         onSelect={(value:any) => {
-                                            console.log(value);
-                                            setSelectedLocation(value);
+                                            setLocalSearchParam({...localSearchParam, location: value})
                                         }}
                                         listMaxHeight={200} //by default 140
                                     />                                                    
@@ -86,21 +89,11 @@ const SearchBar = () => {
                                     placeholder="Select date"
                                     className="form-control flatpickr flatpickr-input"
                                     options={{mode:'range', dateFormat:'d M', enableTime:false}}
+                                    value={[new Date(Date.parse(localSearchParam.dateCheckin)), new Date(Date.parse(localSearchParam.dateCheckout))]}
                                     onChange={(data : Array<Date>) => {
                                         if (data.length === 2){
-                                            let datefrom: Date = data[0];
-                                            let year1 = datefrom.getUTCFullYear();
-                                            let month1 = datefrom.getUTCMonth();
-                                            let date1 = datefrom.getUTCDate();
-
-                                            let dateto: Date = data[1];
-                                            let year2 = dateto.getUTCFullYear();
-                                            let month2 = dateto.getUTCMonth();
-                                            let date2 = dateto.getUTCDate();
-                                            
-                                            setDateCheckin(`${year1}-${month1}-${date1}`);
-                                            setDateCheckout(`${year2}-${month2}-${date2}`);
-                                        }                                        
+                                            setLocalSearchParam({...localSearchParam, dateCheckin:data[0].toString(), dateCheckout:data[1].toString()})
+                                        }
                                     }}
                                 />                                                
                             </div>
@@ -114,7 +107,7 @@ const SearchBar = () => {
                                 <label className="form-label">Guests &amp; rooms</label>
                                 <Dropdown className="guest-selector me-2" autoClose={"outside"}>
                                     <Dropdown.Toggle id="select-guest-button" variant="link" className="form-guest-selector form-control selection-result" style={{textAlign:'left'}}>
-                                        {`${adultNum + childNum} Guests ${roomNum} Rooms`}
+                                        {`${localSearchParam.adultNum + localSearchParam.childNum} Guests ${localSearchParam.roomNum} Rooms`}
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu className="dropdown-menu guest-selector-dropdown">
@@ -128,7 +121,7 @@ const SearchBar = () => {
                                                 <button type="button" className="btn btn-link adult-remove p-0 mb-0" onClick={(e:any) => increaseAdult(e, -1)}>
                                                     <i className="bi bi-dash-circle fs-5 fa-fw"></i>
                                                 </button>
-                                                <h6 className="guest-selector-count mb-0 adults">{adultNum}</h6>
+                                                <h6 className="guest-selector-count mb-0 adults">{localSearchParam.adultNum}</h6>
                                                 <button type="button" className="btn btn-link adult-add p-0 mb-0" onClick={(e:any) => increaseAdult(e, 1)}>
                                                     <i className="bi bi-plus-circle fs-5 fa-fw"></i>
                                                 </button>
@@ -145,7 +138,7 @@ const SearchBar = () => {
                                                 <button type="button" className="btn btn-link child-remove p-0 mb-0" onClick={(e: any) => increaseChild(e, -1)}>
                                                     <i className="bi bi-dash-circle fs-5 fa-fw"></i>
                                                 </button>
-                                                <h6 className="guest-selector-count mb-0 child">{childNum}</h6>
+                                                <h6 className="guest-selector-count mb-0 child">{localSearchParam.childNum}</h6>
                                                 <button type="button" className="btn btn-link child-add p-0 mb-0" onClick={(e: any) => increaseChild(e, 1)}>
                                                     <i className="bi bi-plus-circle fs-5 fa-fw"></i>
                                                 </button>
@@ -162,7 +155,7 @@ const SearchBar = () => {
                                                 <button type="button" className="btn btn-link room-remove p-0 mb-0" onClick={(e: any) => increaseRoom(e, -1)}>
                                                     <i className="bi bi-dash-circle fs-5 fa-fw"></i>
                                                 </button>
-                                                <h6 className="guest-selector-count mb-0 rooms">{roomNum}</h6>
+                                                <h6 className="guest-selector-count mb-0 rooms">{localSearchParam.roomNum}</h6>
                                                 <button type="button" className="btn btn-link room-add p-0 mb-0" onClick={(e: any) => increaseRoom(e, 1)}>
                                                     <i className="bi bi-plus-circle fs-5 fa-fw"></i>
                                                 </button>
@@ -175,9 +168,13 @@ const SearchBar = () => {
                     </div>
                 </div>
                 <div className="btn-position-md-middle">
-                    <Link to={`/search/${getURLParam()}`} className="icon-lg btn btn-round btn-primary mb-0">
+                    <label className="icon-lg btn btn-round btn-primary mb-0" 
+                        onClick={onSearch}>
+                        {
+                            //to={`/search/${getURLParam()}`}
+                        }
                         <i className="bi bi-search fa-fw"></i>
-                    </Link>
+                    </label>
                 </div>
             </form>
     );

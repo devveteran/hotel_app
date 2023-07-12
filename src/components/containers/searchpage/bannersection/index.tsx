@@ -11,7 +11,7 @@ const BannerSection = () => {
                             <h1 className="text-center text-white">150 Hotels in New York</h1>
                         </div>
                     </div>
-                    <SearchBar />
+                    <SearchBar/>
                 </div>
             </div>
         </section>        

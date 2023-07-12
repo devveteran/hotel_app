@@ -10,13 +10,7 @@ import { Dropdown } from "react-bootstrap";
 import SearchBar from "@organisms/searchbar";
 import { Link } from "react-router-dom";
 
-
 const BannerSection = () => {
-
-    useEffect(() => {
-
-    }, []);
-
     return (
         <div>
             <section className="pt-3 pt-lg-5">
@@ -92,8 +86,7 @@ const BannerSection = () => {
                     <div className="row">
                         <div className="col-xl-10 position-relative mt-n3 mt-xl-n9">
                             <h6 className="d-none d-xl-block mb-3">Check Availability</h6>
-                            <SearchBar />
-                            
+                            <SearchBar/>
                         </div>
                     </div>
                 </div>

@@ -10,7 +10,15 @@ import ReferenceSection from "@containers/home/refsection";
 import Footer from "@containers/common/footer";
 import { useState, useEffect } from 'react';
 import Header from "@containers/common/header";
+import { useNavigate } from 'react-router-dom';
+import { SearchParamType } from '@constants/types';
+import { setSearchParam } from '@store/reducers/global';
+import { useDispatch } from 'react-redux';
+
 const Home = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    
     const [scroll, setScroll] = useState(false);
 
     const onClickScrollToTop = () => {
@@ -28,8 +36,8 @@ const Home = () => {
         return () => {
              document.removeEventListener("scroll", onScroll)
             }
-      }, [scroll, setScroll])
-      
+    }, [scroll, setScroll])
+    
     return (
         <div className='home-view'>
             {/* <Header scroll={false}/> */}

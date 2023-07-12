@@ -1,23 +1,24 @@
+import { initialSearchParam, SearchParamType } from '@constants/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface GlobalState {
-    numCamera: number,
+    searchParam: SearchParamType,
 }
 
 const initialState: GlobalState = {
-    numCamera: 4,
+    searchParam: initialSearchParam,
 }
 
 const GlobalSlice = createSlice({
     name: 'global',
     initialState,
     reducers: {
-        setNumCamera: (state, action:PayloadAction<number>) => {
-            state.numCamera = action.payload;
+        setSearchParam: (state, action:PayloadAction<SearchParamType>) => {
+            state.searchParam = {...action.payload};
         },
     }
 });
 
-export const { setNumCamera } = GlobalSlice.actions;
+export const { setSearchParam } = GlobalSlice.actions;
 export default GlobalSlice.reducer;
 

@@ -2,7 +2,7 @@ import Header from "@containers/common/header";
 import BannerSection from "@containers/searchpage/bannersection";
 import LeftSearchPanel from "@containers/searchpage/searchpanel";
 import HotelItemCard from "@organisms/hotel-item-card";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import './searchpage.scss';
 import Footer from "@containers/common/footer";
 import GoogleMapReact from 'google-map-react';
@@ -12,6 +12,9 @@ import ReactSlider from 'react-slider';
 import { Dropdown } from "react-bootstrap";
 import { randomInt } from "crypto";
 import { useParams, useSearchParams } from "react-router-dom";
+import { CustomerRatingType, SearchParamType, StarRatingType, TopAmenities, initialCustomerRating, initialStarRating } from "@constants/types";
+import { useSelector } from "react-redux";
+import { RootState } from "@store/index";
 
 export interface MapViewState {
     show: boolean,
@@ -26,41 +29,89 @@ export const initialMapViewState = {
 
 const MIN_PRICE = 500
 const MAX_PRICE = 2000
-const SearchPage = () => { 
-    const paramsURL = useParams();
-    let params = "___0_0_0";
-    if (Object.keys(paramsURL).length > 0) {
-        params = window.atob(paramsURL.param || '');
-    }
-    let aryparams = params?.split('_');
 
-    const [selectedLocation, setSelectedLocation] = useState<string>(aryparams[0]);
-    const [dateCheckin, setDateCheckin] = useState<string>(aryparams[1]);
-    const [dateCheckout, setDateCheckout] = useState<string>(aryparams[2]);
-    const [adultNum, setAdultNum] = useState(aryparams[3]);
-    const [childNum, setChildNum] = useState(aryparams[4]);
-    const [roomNum, setRoomNum] = useState(aryparams[5]);
+const SearchPage = () => { 
+    const searchParam = useSelector((state:RootState) => state.global.searchParam);
 
     const [scroll, setScroll] = useState(false);
     const [showSearchPanel, setShowSearchPanel] = useState(false);
-    const refPanel = useRef<any>(null);
-    const refButtonToggle = useRef<any>(null);
     const [visibleToggleButton, setVisibleToggleButton] = useState(false);
     const [viewMode, setViewMode] = useState<string>('list');
     const [mapState, setMapState] = useState<MapViewState>(initialMapViewState);
+
+    const [hotelName, setHotelName] = useState<string>("");
     const [minPrice, setMinPrice] = useState<string>(MIN_PRICE.toFixed(2));
     const [maxPrice, setMaxPrice] = useState<string>(MAX_PRICE.toFixed(2));
-    const [searchFilter, setSearchFilter] = useState<string>('Select Option');
+    const [popularFilter, setPopularFilter] = useState<string>('Select Option');
     const [hotelTypeFilter, setHotelTypeFilter] = useState<string>('Select Option');
-    const refMap = useRef(null);
+    const [customerRating, setCustomerRating] = useState<CustomerRatingType>(initialCustomerRating);
+    const [starRating, setStarRating] = useState<StarRatingType>(initialStarRating);
+    const [amenities, setAmenities] = useState<{[arg:string]: boolean}>({});
 
     const onSelectHotelType = ( v: string ) => {
         setHotelTypeFilter(v);
     }
 
-    const onSelectFilter = (v: string) => {
-        setSearchFilter(v);
+    useEffect(() => {
+        // console.log(searchParam);
+    }, [searchParam]);
+
+    const searchHotels = async () => {
+
     }
+
+    const onChangeHotelName = (v: any) => {
+        let val = v.target.value;
+        setHotelName(val);
+    }
+    const toggleCustomerRating = (v: string) => {
+        Object.keys(customerRating).forEach((ele, i) => {
+            if (ele === v) {
+                let val = Object.values(customerRating)[i];
+                setCustomerRating(prev => ({...prev, [ele]: !val}));
+            }
+        })
+    }
+
+    const toggleStarRating = (v: string) => {
+        Object.keys(starRating).forEach((ele, i) => {
+            if (ele === v) {
+                let val = Object.values(starRating)[i];
+                setStarRating(prev => ({...prev, [ele]: !val}));
+            }
+        })
+    }
+    
+    const clearAllFilters = () => {
+        setHotelName('');
+        setMinPrice(MIN_PRICE.toFixed(2));
+        setMaxPrice(MAX_PRICE.toFixed(2));
+        setPopularFilter('Select Option');
+        setHotelTypeFilter('Select Option');
+        setCustomerRating(initialCustomerRating);
+        setStarRating(initialStarRating);
+        setAmenities({});
+    }
+
+
+    const toggleAmenities = (v: string) => {
+        let bfound: boolean = false;
+        Object.keys(amenities).forEach((ele, i) => {
+            if (ele === v) {
+                let val = Object.values(amenities)[i];
+                setAmenities(prev => ({...prev, [ele]: !val}));
+                bfound = true;
+            }
+        })
+        if (!bfound) {
+            setAmenities(prev => ({...prev, [v]: true}));
+        }
+    }
+
+    const onSelectFilter = (v: string) => {
+        setPopularFilter(v);
+    }
+
     const toggleMap = () => {
         let tmp_mapState = {...mapState};
         tmp_mapState.show = !tmp_mapState.show;
@@ -73,9 +124,6 @@ const SearchPage = () => {
     const viewMap = (v: MapViewState) => {
         let tv = {...v};
         setMapState(tv);
-        if (v.show && refMap.current !== null) {
-            
-        }
     }
 
     const toggleViewMode = (v: string) => {
@@ -156,10 +204,10 @@ const SearchPage = () => {
                     <div className={`row ${viewMode==='list' ? 'mb-4': ''}`}>
                         <div className='col-12'>
                             <div className={`${'d-flex justify-content-end'}`}>
-                                <label ref={refButtonToggle} className={`${'btn btn-primary-soft btn-primary-check mb-0'} ${showSearchPanel ? 'active':''}`} onClick={toggleSearchPanel}>
+                                <label className={`${'btn btn-primary-soft btn-primary-check mb-0'} ${showSearchPanel ? 'active':''}`} onClick={toggleSearchPanel}>
                                     <FontAwesomeIcon icon={faSlidersH}/> Show filters
                                 </label>
-                                <label ref={refButtonToggle} className={`${'btn btn-primary-soft btn-primary-check mb-0 ms-4'} ${mapState.show ? 'active':''}`} onClick={toggleMap}>
+                                <label className={`${'btn btn-primary-soft btn-primary-check mb-0 ms-4'} ${mapState.show ? 'active':''}`} onClick={toggleMap}>
                                     <FontAwesomeIcon icon={faMapMarkerAlt} /> Show Map
                                 </label>
                                 <ul className="nav nav-pills nav-pills-dark d-none" id="tour-pills-tab" role="tablist">
@@ -176,11 +224,11 @@ const SearchPage = () => {
                     <div className={`row mb-4 ${showSearchPanel === true ? '' : 'd-none'}`}>
                         <div>
                             <div className="card card-body bg-light p-4 z-index-9">
-                                <form className="row g-4">
+                                <div className="row g-4">
                                     <div className="col-md-6 col-lg-4">
                                         <div className="form-control-borderless">
                                             <label className="form-label">Enter Hotel Name</label>
-                                            <input type="text" className="form-control form-control-lg"/>
+                                            <input type="text" className="form-control form-control-lg" value={hotelName} onChange={(v: any) => onChangeHotelName(v)}/>
                                         </div>
                                     </div>
 
@@ -200,6 +248,7 @@ const SearchPage = () => {
                                                         defaultValue={[MIN_PRICE, MAX_PRICE]}
                                                         min={MIN_PRICE}
                                                         max={MAX_PRICE}
+                                                        value={[Number(minPrice), Number(maxPrice)]}
                                                         onChange={(v:Array<number>, i: number) => onChangePriceRange(v, i)}
                                                         ariaLabelledby={['first-slider-label', 'second-slider-label']}
                                                         ariaValuetext={(state:any) => `Thumb value ${state.valueNow}`}
@@ -217,10 +266,10 @@ const SearchPage = () => {
                                                 <Dropdown.Toggle id="select-filter-button" variant="link" className="custom-dropdown-button form-control form-control-lg" 
                                                     style={{textAlign:'left'}}>
                                                     {
-                                                        searchFilter === 'Select Option' ?
+                                                        popularFilter === 'Select Option' ?
                                                         (
-                                                            <span className='no-select'>{searchFilter}</span>
-                                                        ) : <span>{searchFilter}</span>
+                                                            <span className='no-select'>{popularFilter}</span>
+                                                        ) : <span>{popularFilter}</span>
                                                     }
                                                 </Dropdown.Toggle>
 
@@ -247,19 +296,19 @@ const SearchPage = () => {
                                             <label className="form-label">Customer Rating</label>
                                             <ul className="list-inline mb-0 g-3">
                                                 <li className="list-inline-item">
-                                                    <input type="checkbox" className="btn-check" id="btn-check-1"/>
+                                                    <input type="checkbox" className="btn-check" id="btn-check-1" checked={customerRating.threePlus} onChange={() => toggleCustomerRating('threePlus')}/>
                                                     <label className="btn btn-white btn-primary-soft-check" htmlFor="btn-check-1">3+</label>
                                                 </li>
                                                 <li className="list-inline-item">
-                                                    <input type="checkbox" className="btn-check" id="btn-check-2"/>
+                                                    <input type="checkbox" className="btn-check" checked={customerRating.threeHalfPlus} id="btn-check-2" onChange={() => toggleCustomerRating('threeHalfPlus')}/>
                                                     <label className="btn btn-white btn-primary-soft-check" htmlFor="btn-check-2">3.5+</label>
                                                 </li>
                                                 <li className="list-inline-item">
-                                                    <input type="checkbox" className="btn-check" id="btn-check-3"/>
+                                                    <input type="checkbox" className="btn-check" checked={customerRating.fourPlus} id="btn-check-3" onChange={() => toggleCustomerRating('fourPlus')}/>
                                                     <label className="btn btn-white btn-primary-soft-check" htmlFor="btn-check-3">4+</label>
                                                 </li>
                                                 <li className="list-inline-item">
-                                                    <input type="checkbox" className="btn-check" id="btn-check-4"/>
+                                                    <input type="checkbox" checked={customerRating.fourHalfPlus} className="btn-check" id="btn-check-4" onChange={() => toggleCustomerRating('fourHalfPlus')}/>
                                                     <label className="btn btn-white btn-primary-soft-check" htmlFor="btn-check-4">4.5+</label>
                                                 </li>
                                             </ul>
@@ -271,23 +320,23 @@ const SearchPage = () => {
                                             <label className="form-label">Star Rating</label>
                                             <ul className="list-inline mb-0 g-3">
                                                 <li className="list-inline-item">
-                                                    <input type="checkbox" className="btn-check" id="btn-check-9"/>
+                                                    <input type="checkbox" className="btn-check" id="btn-check-9" checked={starRating.starOne} onChange={() => toggleStarRating('starOne')}/>
                                                     <label className="btn btn-white btn-primary-soft-check" htmlFor="btn-check-9">1<i className="bi bi-star-fill"></i></label>
                                                 </li>
                                                 <li className="list-inline-item">
-                                                    <input type="checkbox" className="btn-check" id="btn-check-10"/>
+                                                    <input type="checkbox" className="btn-check" id="btn-check-10" checked={starRating.starTwo} onChange={() => toggleStarRating('starTwo')}/>
                                                     <label className="btn btn-white btn-primary-soft-check" htmlFor="btn-check-10">2<i className="bi bi-star-fill"></i></label>
                                                 </li>
                                                 <li className="list-inline-item">
-                                                    <input type="checkbox" className="btn-check" id="btn-check-11"/>
+                                                    <input type="checkbox" className="btn-check" id="btn-check-11" checked={starRating.starThree} onChange={() => toggleStarRating('starThree')}/>
                                                     <label className="btn btn-white btn-primary-soft-check" htmlFor="btn-check-11">3<i className="bi bi-star-fill"></i></label>
                                                 </li>
                                                 <li className="list-inline-item">
-                                                    <input type="checkbox" className="btn-check" id="btn-check-12"/>
+                                                    <input type="checkbox" className="btn-check" id="btn-check-12" checked={starRating.starFour} onChange={() => toggleStarRating('starFour')}/>
                                                     <label className="btn btn-white btn-primary-soft-check" htmlFor="btn-check-12">4<i className="bi bi-star-fill"></i></label>
                                                 </li>
                                                 <li className="list-inline-item">
-                                                    <input type="checkbox" className="btn-check" id="btn-check-13"/>
+                                                    <input type="checkbox" className="btn-check" id="btn-check-13" checked={starRating.starFive} onChange={() => toggleStarRating('starFive')}/>
                                                     <label className="btn btn-white btn-primary-soft-check" htmlFor="btn-check-13">5<i className="bi bi-star-fill"></i></label>
                                                 </li>
                                             </ul>
@@ -330,122 +379,29 @@ const SearchPage = () => {
                                         <div className="form-control-borderless">
                                             <label className="form-label">Amenities</label>
                                             <div className="row g-3">
-                                                <div className="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
-                                                        <label className="form-check-label h6 fw-light mb-0" htmlFor="flexCheckDefault">
-                                                            Air Conditioning
-                                                        </label>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault2"/>
-                                                        <label className="form-check-label h6 fw-light mb-0" htmlFor="flexCheckDefault2">
-                                                            Room Services
-                                                        </label>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault3"/>
-                                                            <label className="form-check-label h6 fw-light mb-0" htmlFor="flexCheckDefault3">
-                                                                Dining
-                                                            </label>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault4"/>
-                                                            <label className="form-check-label h6 fw-light mb-0" htmlFor="flexCheckDefault4">
-                                                                Caretaker
-                                                            </label>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault5"/>
-                                                            <label className="form-check-label h6 fw-light mb-0" htmlFor="flexCheckDefault5">
-                                                                Free Internet
-                                                            </label>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div className="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault6"/>
-                                                            <label className="form-check-label h6 fw-light mb-0" htmlFor="flexCheckDefault6">
-                                                                Business Service
-                                                            </label>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault7"/>
-                                                            <label className="form-check-label h6 fw-light mb-0" htmlFor="flexCheckDefault7">
-                                                                Bonfire
-                                                            </label>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault8"/>
-                                                            <label className="form-check-label h6 fw-light mb-0" htmlFor="flexCheckDefault8">
-                                                                Mask
-                                                            </label>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault9"/>
-                                                            <label className="form-check-label h6 fw-light mb-0" htmlFor="flexCheckDefault9">
-                                                                Spa
-                                                            </label>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault10"/>
-                                                            <label className="form-check-label h6 fw-light mb-0" htmlFor="flexCheckDefault10">
-                                                                Swimming pool
-                                                            </label>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault11"/>
-                                                            <label className="form-check-label h6 fw-light mb-0" htmlFor="flexCheckDefault11">
-                                                                Fitness Centre 
-                                                            </label>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault12"/>
-                                                            <label className="form-check-label h6 fw-light mb-0" htmlFor="flexCheckDefault12">
-                                                                Bar 
-                                                            </label>
-                                                    </div>
-                                                </div>
+                                                {
+                                                    TopAmenities.map((ele, i) => {
+                                                        return (
+                                                            <div key={ele} className="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                                                                <div className="form-check">
+                                                                    <input className="form-check-input" type="checkbox" value="" checked={amenities[ele] ? amenities[ele]: false} id={`filter-${ele}`} onChange={() => toggleAmenities(ele)}/>
+                                                                    <label className="form-check-label h6 fw-light mb-0" htmlFor={`filter-${ele}`}>
+                                                                        {ele}
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
                                             </div> 
                                         </div>
                                     </div>
 
                                     <div className="text-end align-items-center">
-                                        <button className="btn btn-link p-0 mb-0">Clear all</button>
-                                        <button className="btn btn-dark mb-0 ms-3">Apply filter</button>
+                                        <label className="btn btn-link p-0 mb-0" onClick={clearAllFilters}>Clear all</label>
+                                        <label className="btn btn-dark mb-0 ms-3" onClick={searchHotels}>Apply filter</label>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -475,7 +431,6 @@ const SearchPage = () => {
                         </div>
                         <div className={`${mapState.show === true ? 'p-0 col-md-5 d-none d-md-block' : 'd-none'} map-wrapper rounded-2`}>
                             <GoogleMapReact
-                                ref={refMap}
                                 center={{
                                     lat: mapState.lat,
                                     lng: mapState.lon
@@ -489,7 +444,6 @@ const SearchPage = () => {
                     </div>
                 </div>
             </section>
-
             <Footer />
             <div className={`back-top ${scroll ? 'back-top-show' : ''}`} onClick={onClickScrollToTop}></div>
         </div>
