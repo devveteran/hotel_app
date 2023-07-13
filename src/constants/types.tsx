@@ -1,17 +1,36 @@
-export interface HotelInfo {
+export interface ReviewType {
+    [arg:string] : number
+}
+
+export interface ReviewDescType {
+    rate: string,
+    desc: string,
+    writer: string,
+    review_date: string,
+    stay_date: string,
+}
+
+export interface PriceHistoryType {
+    date: number
+};
+
+export interface DBHotelInfo {
     id: number,
     name: string,
     description: string,
     address: string,
+    starRate: number,
+    reviewRate: number,
+    reviewCount: number,
     telephone: string,
     photoURIs: string,
     fax: string,
     url: string,
     checkin: string,
     checkout: string,
-    amenitiesJSON: any,
-    reviewsJSON: any,
-    reviewDescsJSON: any,
+    amenitiesJSON: string,
+    reviewsJSON: string,
+    reviewDescsJSON: string,
     guestNum: number,
     roomNum: number,
     geoPosition: string,
@@ -26,33 +45,74 @@ export interface HotelInfo {
     priceHistoryHotels: string
 }
 
+export interface AmenityType {
+    [arg: string] : Array<string>
+};
+
+export interface HotelInfo {
+    id: number,
+    name: string,
+    description: string,
+    address: string,
+    starRate: number,
+    reviewRate: number,
+    reviewCount: number,
+    telephone: string,
+    photoURIs: Array<string>,
+    fax: string,
+    url: string,
+    checkin: string,
+    checkout: string,
+    amenities: AmenityType,
+    reviews: Array<ReviewType>,
+    reviewDescs: Array<ReviewDescType>,
+    guestNum: number,
+    roomNum: number,
+    geoLat: number,
+    getLon: number,
+    priceBookings: number,
+    priceHotels: number,
+    priceExpedia: number,
+    urlBookings: string,
+    urlExpedia: string,
+    urlHotels: string,
+    priceHistoryBookings: Array<PriceHistoryType>,
+    priceHistoryExpedia: Array<PriceHistoryType>,
+    priceHistoryHotels: Array<PriceHistoryType>
+}
+
 export const initialHotelInfo: HotelInfo = {
     id: 0,
     name: '',
     description: '',
+    starRate: 0,
+    reviewRate: 0,
+    reviewCount: 0,
     address: '',
     telephone: '',
-    photoURIs: '',
+    photoURIs: [],
     fax: '',
     url: '',
     checkin: '',
     checkout: '',
-    amenitiesJSON: {},
-    reviewsJSON: {},
-    reviewDescsJSON: {},
+    amenities: {},
+    reviews: [],
+    reviewDescs: [],
     guestNum: 0,
     roomNum: 0,
-    geoPosition: '',
+    geoLat: 0,
+    getLon: 0,
     priceBookings: 0,
     priceHotels: 0,
     priceExpedia: 0,
     urlBookings: '',
     urlExpedia: '',
     urlHotels: '',
-    priceHistoryBookings: '',
-    priceHistoryExpedia: '',
-    priceHistoryHotels: ''
+    priceHistoryBookings: [],
+    priceHistoryExpedia: [],
+    priceHistoryHotels: []
 }
+
 export interface CustomerRatingType {
     threePlus: boolean,
     threeHalfPlus: boolean,

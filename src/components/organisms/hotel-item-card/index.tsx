@@ -8,6 +8,7 @@ import './hotelitem.scss';
 import { useState } from "react";
 import DetailView from "@containers/searchpage/detailview";
 import { MapViewState } from "src/pages/searchpage";
+import { HotelInfo } from "@constants/types";
 
 const responsive = {
     desktop: {
@@ -28,16 +29,10 @@ const responsive = {
 };
 interface PropType {
     viewMode: string;
-    images: Array<string>,
-    rate: number,
-    title: string,
+    hotel: HotelInfo,
     viewMap: (v: MapViewState) => void,
-    lat: number,
-    lon: number,
-    reviewRate: number,
-    reviewCnt: number
 }
-const HotelItemCard = ({viewMode, images, rate, title, viewMap, lat, lon, reviewRate, reviewCnt}: PropType) => 
+const HotelItemCard = ({viewMode, hotel, viewMap}: PropType) => 
 {
     const [detailTab, setDetailTab] = useState<string>('');
     const viewDetail = (v: string) => {
@@ -47,12 +42,12 @@ const HotelItemCard = ({viewMode, images, rate, title, viewMap, lat, lon, review
             setDetailTab('');
     }
     let starRates: Array<any> = [];
-    for(let i = 0; i<Math.trunc(rate); i++) {
+    for(let i = 0; i<Math.trunc(hotel.starRate); i++) {
         starRates.push (<li key={`star${i+1}`} className="list-inline-item me-0 small">
                         <FontAwesomeIcon icon={faStar} className='text-warning'/>
                     </li>)
     }
-    if (Math.trunc(rate) < rate) {
+    if (Math.trunc(hotel.starRate) < hotel.starRate) {
         starRates.push (<li key={`starlast`} className="list-inline-item me-0 small">
                         <FontAwesomeIcon icon={faStarHalfAlt} className='text-warning'/>
                     </li>)
@@ -82,7 +77,7 @@ const HotelItemCard = ({viewMode, images, rate, title, viewMap, lat, lon, review
                                         rewind={true}
                                     >
                                         {
-                                            images.map((v, i) => {
+                                            hotel.photoURIs.map((v, i) => {
                                                 return (
                                                     <div key={i} className="tns-item tns-slide-cloned rounded-2" aria-hidden="true" tabIndex={-1} 
                                                         onClick={() => viewDetail('image')}>
@@ -127,19 +122,19 @@ const HotelItemCard = ({viewMode, images, rate, title, viewMap, lat, lon, review
                                     </ul>
                                 </div>
         
-                                <h6 className="card-title mb-1"><a onClick={() => viewDetail('overview')}>{title}</a></h6>
-                                <small onClick={() => viewMap({show:true, lat:lat, lon:lon})}><i className="bi bi-geo-alt me-2"></i>5855 W Century Blvd, Los Angeles - 90045</small>
+                                <h6 className="card-title mb-1"><a onClick={() => viewDetail('overview')}>{hotel.name}</a></h6>
+                                <small onClick={() => viewMap({show:true, lat:hotel.geoLat, lon:hotel.getLon})}><i className="bi bi-geo-alt me-2"></i>5855 W Century Blvd, Los Angeles - 90045</small>
                                 <ul className="nav nav-divider mt-3">
                                     <li className="nav-item">
                                         <b style={{color:'var(--bs-gray-900)'}}>
-                                        {reviewRate}
+                                        {hotel.reviewRate}
                                         {
-                                            reviewRate >=4.5 ? ' - Excellent' : 
-                                                reviewRate >=4 ? ' - Very Good' :
-                                                    reviewRate >= 3.5 ? ' - Good' :
-                                                        reviewRate >= 3 ? '' : ''
+                                            hotel.reviewRate >=4.5 ? ' - Excellent' : 
+                                                hotel.reviewRate >=4 ? ' - Very Good' :
+                                                    hotel.reviewRate >= 3.5 ? ' - Good' :
+                                                        hotel.reviewRate >= 3 ? '' : ''
                                         }
-                                        </b> ({reviewCnt} reviews)
+                                        </b> ({hotel.reviewCount} reviews)
                                     </li>
                                 </ul>
                                 {/* <ul className="nav nav-divider mt-3">

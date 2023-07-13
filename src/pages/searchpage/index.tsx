@@ -10,11 +10,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarkerAlt, faSlidersH } from "@fortawesome/free-solid-svg-icons";
 import ReactSlider from 'react-slider';
 import { Dropdown } from "react-bootstrap";
-import { randomInt } from "crypto";
-import { useParams, useSearchParams } from "react-router-dom";
-import { CustomerRatingType, SearchParamType, StarRatingType, TopAmenities, initialCustomerRating, initialStarRating } from "@constants/types";
+import { CustomerRatingType, DBHotelInfo, HotelInfo, SearchParamType, StarRatingType, TopAmenities, initialCustomerRating, initialHotelInfo, initialStarRating } from "@constants/types";
 import { useSelector } from "react-redux";
 import { RootState } from "@store/index";
+import { userInstance } from "@services/axios";
 
 export interface MapViewState {
     show: boolean,
@@ -29,10 +28,10 @@ export const initialMapViewState = {
 
 const MIN_PRICE = 500
 const MAX_PRICE = 2000
+const NUM_ROWS_PAGE = 25
 
 const SearchPage = () => { 
     const searchParam = useSelector((state:RootState) => state.global.searchParam);
-
     const [scroll, setScroll] = useState(false);
     const [showSearchPanel, setShowSearchPanel] = useState(false);
     const [visibleToggleButton, setVisibleToggleButton] = useState(false);
@@ -48,22 +47,160 @@ const SearchPage = () => {
     const [starRating, setStarRating] = useState<StarRatingType>(initialStarRating);
     const [amenities, setAmenities] = useState<{[arg:string]: boolean}>({});
 
+    const [hotels, setHotels] = useState<Array<HotelInfo>>([]);
+    const [numHotels, setNumHotels] = useState<number>(0);
+    const curPage = useRef<number>(0);
+
     const onSelectHotelType = ( v: string ) => {
         setHotelTypeFilter(v);
     }
 
     useEffect(() => {
-        // console.log(searchParam);
+        onClickScrollToTop();
+    }, []);
+
+    useEffect(() => {
+        fetchHotels();
     }, [searchParam]);
 
-    const searchHotels = async () => {
-
+    const fetchHotels = () => {
+        curPage.current = 0;
+        searchHotels();
     }
+
+    const searchHotels = async () => {
+        let strCustomerRating = "";
+        
+        if (customerRating.threePlus)
+            strCustomerRating = "3";
+
+        if (customerRating.threeHalfPlus)
+            if (strCustomerRating === "")
+                strCustomerRating = "3.5";
+            else 
+                strCustomerRating += "+3.5";
+        
+        if (customerRating.fourPlus)
+            if (strCustomerRating === "")
+                strCustomerRating = "4";
+            else
+                strCustomerRating += "+4";
+
+        if (customerRating.fourHalfPlus)
+            if (strCustomerRating === "")
+                strCustomerRating = "4.5";
+            else
+                strCustomerRating += "+4.5";
+        
+        let strStarRating = "";
+        if (starRating.starOne)
+            strStarRating = "1";
+
+        if (starRating.starTwo)
+            if (strStarRating === "")
+                strStarRating = "2";
+            else
+                strStarRating += "+2";
+
+        if (starRating.starThree)
+            if (strStarRating === "")
+                strStarRating = "3";
+            else
+                strStarRating += "+3";
+
+        if (starRating.starFour)
+            if (strStarRating === "")
+                strStarRating = "4";
+            else
+                strStarRating += "+4";
+
+        if (starRating.starFive)
+            if (strStarRating === "")
+                strStarRating = "5";
+            else
+                strStarRating += "+5";
+        
+        let strAmenities = "";
+        Object.keys(amenities).forEach((ele, i) => {
+            let val = Object.values(amenities)[i];
+            if (val === true) {
+                if (strAmenities === "")
+                    strAmenities = ele;
+                else
+                    strAmenities += "_" + ele;
+            }
+        });
+
+        const date1 = new Date(Date.parse(searchParam.dateCheckin));
+        let strDateCheckin = date1.getUTCFullYear() + "-" + date1.getUTCMonth() + "-" + date1.getUTCDate();
+        const date2 = new Date(Date.parse(searchParam.dateCheckout));
+        let strDateCheckout = date2.getUTCFullYear() + "-" + date2.getUTCMonth() + "-" + date2.getUTCDate();
+
+        let param = searchParam.location + ";" + strDateCheckin + ";" + strDateCheckout + ";" + 
+            searchParam.adultNum + ";" + searchParam.childNum + ";" + searchParam.roomNum + ";" +
+            hotelName + ";" + minPrice + ";" + maxPrice + ";" + popularFilter + ";" + hotelTypeFilter +
+            ";" + strCustomerRating + ";" + strStarRating + ";" + strAmenities + ";" + curPage.current;
+        
+        const urlparam = window.btoa(param);
+        
+        userInstance().get(`/api/HotelInfoes/${urlparam}`).then((response) => {
+            const data = response.data as Array<DBHotelInfo>;
+            const aryHotels: Array<HotelInfo> = [];
+            data.forEach((ele, i:number) => {
+                let hotel: HotelInfo = initialHotelInfo;
+                hotel.id = ele.id;
+                hotel.name = ele.name;
+                hotel.address = ele.address;
+                hotel.url = ele.url;
+                hotel.starRate = ele.starRate;
+                hotel.reviewRate = ele.reviewRate;
+                hotel.reviewCount = ele.reviewCount;
+                hotel.description = ele.description;
+                hotel.checkin = ele.checkin;
+                hotel.checkout = ele.checkout;
+                hotel.fax = ele.fax;
+                hotel.telephone = ele.telephone;
+
+                let aryphotos = ele.photoURIs.split(";");
+                aryphotos.forEach((ele, i) => {
+                    hotel.photoURIs.push(ele);
+                });
+
+                hotel.amenities = JSON.parse(ele.amenitiesJSON);
+                hotel.reviews = JSON.parse(ele.reviewsJSON);
+                hotel.reviewDescs = JSON.parse(ele.reviewDescsJSON);
+
+                hotel.guestNum = ele.guestNum;
+                hotel.roomNum = ele.roomNum;
+                hotel.getLon = 0;
+                hotel.geoLat = 0;
+                hotel.priceBookings = ele.priceBookings;
+                hotel.priceExpedia = ele.priceExpedia;
+                hotel.priceHotels = ele.priceHotels;
+                hotel.urlHotels = ele.urlHotels;
+                hotel.urlExpedia = ele.urlExpedia;
+                hotel.urlBookings = ele.urlBookings;
+                hotel.priceHistoryBookings = JSON.parse(ele.priceHistoryBookings);
+                hotel.priceHistoryExpedia = JSON.parse(ele.priceHistoryExpedia);
+                hotel.priceHistoryHotels = JSON.parse(ele.priceHistoryHotels);
+                aryHotels.push({...hotel});
+            });
+            console.log(aryHotels)
+            setHotels([...aryHotels]);
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
+    useEffect(() => {
+        // console.log(hotels);
+    }, [hotels])
 
     const onChangeHotelName = (v: any) => {
         let val = v.target.value;
         setHotelName(val);
     }
+
     const toggleCustomerRating = (v: string) => {
         Object.keys(customerRating).forEach((ele, i) => {
             if (ele === v) {
@@ -399,7 +536,7 @@ const SearchPage = () => {
 
                                     <div className="text-end align-items-center">
                                         <label className="btn btn-link p-0 mb-0" onClick={clearAllFilters}>Clear all</label>
-                                        <label className="btn btn-dark mb-0 ms-3" onClick={searchHotels}>Apply filter</label>
+                                        <label className="btn btn-dark mb-0 ms-3" onClick={fetchHotels}>Apply filter</label>
                                     </div>
                                 </div>
                             </div>
@@ -413,18 +550,12 @@ const SearchPage = () => {
                         <div className={`${mapState.show === true ? 'col-md-7' : ''}`}>
                             <div className='vstack gap-4'>
                                 {
-                                    [1,2,3,4,5,6,7,8].map((v, i) => {
+                                    hotels.map((ele, i) => {
                                         return (<HotelItemCard 
-                                        key={i}
+                                        key={ele.id}
                                         viewMode="list"
-                                        images={["@images/category/hotel/4by3/03.jpg", "@images/category/hotel/4by3/03.jpg"]}
-                                        rate={4} 
-                                        title={"Courtyard by Marriott New York"} 
-                                        viewMap={viewMap} 
-                                        lat={10 + 10 * i} 
-                                        lon={38}
-                                        reviewRate={4.8} 
-                                        reviewCnt={502}/>)
+                                        viewMap={viewMap}
+                                        hotel={ele}/>)
                                     })
                                 }
                             </div>
