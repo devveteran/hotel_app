@@ -1,10 +1,12 @@
+import { HotelInfo } from '@constants/types';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
 interface PropType {
     selectedTab : string,
+    hotel: HotelInfo,
 }
-const DetailView = ({selectedTab} : PropType) => {
+const DetailView = ({selectedTab, hotel} : PropType) => {
     return (
         <div className='mt-2'>
             <Tabs>
@@ -16,7 +18,7 @@ const DetailView = ({selectedTab} : PropType) => {
                 </TabList>
 
                 <TabPanel>
-                    <h2>Overview</h2>
+                    {hotel.description}
                 </TabPanel>
                 <TabPanel>
                     <h2>Info</h2>

@@ -55,7 +55,7 @@ const SearchBar = () => {
                             <div className="flex-grow-1">
                                 <label className="form-label" style={{zIndex:11}}>Location</label>
                                 <div id="selected-location" className="choices" data-type="select-one" tabIndex={0} role="combobox" aria-autocomplete="list" aria-haspopup="true" aria-expanded="false" style={{position:'relative'}}>
-                                    <Searchable 
+                                    {/* <Searchable 
                                         value={localSearchParam.location}
                                         placeholder="Select Location" // by default "Search"
                                         notFoundText="No results found" // by default "No result found"
@@ -74,7 +74,10 @@ const SearchBar = () => {
                                             setLocalSearchParam({...localSearchParam, location: value})
                                         }}
                                         listMaxHeight={200} //by default 140
-                                    />                                                    
+                                    />                                                     */}
+                                    <input type='text' className='form-control flatpickr ' 
+                                        value={localSearchParam.location} 
+                                        onChange={(v:any) => setLocalSearchParam({...localSearchParam, location:v.target.value})} />
                                 </div>
                             </div>
                         </div>

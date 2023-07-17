@@ -7,13 +7,14 @@ import './searchpage.scss';
 import Footer from "@containers/common/footer";
 import GoogleMapReact from 'google-map-react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapMarkerAlt, faSlidersH } from "@fortawesome/free-solid-svg-icons";
+import { faAngleLeft, faAngleRight, faMapMarkerAlt, faSlidersH } from "@fortawesome/free-solid-svg-icons";
 import ReactSlider from 'react-slider';
 import { Dropdown } from "react-bootstrap";
 import { CustomerRatingType, DBHotelInfo, HotelInfo, SearchParamType, StarRatingType, TopAmenities, initialCustomerRating, initialHotelInfo, initialStarRating } from "@constants/types";
 import { useSelector } from "react-redux";
 import { RootState } from "@store/index";
 import { userInstance } from "@services/axios";
+import ReactPaginate from 'react-paginate';
 
 export interface MapViewState {
     show: boolean,
@@ -28,7 +29,7 @@ export const initialMapViewState = {
 
 const MIN_PRICE = 500
 const MAX_PRICE = 2000
-const NUM_ROWS_PAGE = 25
+const NUM_ROWS_PAGE = 5
 
 const SearchPage = () => { 
     const searchParam = useSelector((state:RootState) => state.global.searchParam);
@@ -49,7 +50,8 @@ const SearchPage = () => {
 
     const [hotels, setHotels] = useState<Array<HotelInfo>>([]);
     const [numHotels, setNumHotels] = useState<number>(0);
-    const curPage = useRef<number>(0);
+    const curPage = useRef<number>(1);
+    const rowsCount = useRef<number>(0);
 
     const onSelectHotelType = ( v: string ) => {
         setHotelTypeFilter(v);
@@ -64,10 +66,13 @@ const SearchPage = () => {
     }, [searchParam]);
 
     const fetchHotels = () => {
-        curPage.current = 0;
+        curPage.current = 1;
         searchHotels();
     }
-
+    const handlePageClick = (v: any) => {
+        curPage.current = v.selected + 1;
+        searchHotels();
+    }
     const searchHotels = async () => {
         let strCustomerRating = "";
         
@@ -141,9 +146,18 @@ const SearchPage = () => {
             hotelName + ";" + minPrice + ";" + maxPrice + ";" + popularFilter + ";" + hotelTypeFilter +
             ";" + strCustomerRating + ";" + strStarRating + ";" + strAmenities + ";" + curPage.current;
         
+        // console.log(param);
+
         const urlparam = window.btoa(param);
-        
+
+        userInstance().get(`/api/HotelInfoes/${urlparam}/count`).then((response) => {
+            rowsCount.current = response.data;
+        }).catch(error => {
+            console.log(error);
+        });
+
         userInstance().get(`/api/HotelInfoes/${urlparam}`).then((response) => {
+            // console.log(response)
             const data = response.data as Array<DBHotelInfo>;
             const aryHotels: Array<HotelInfo> = [];
             data.forEach((ele, i:number) => {
@@ -559,6 +573,26 @@ const SearchPage = () => {
                                     })
                                 }
                             </div>
+                            <nav className="d-flex justify-content-center" aria-label="navigation">
+                                <ReactPaginate 
+                                    breakLabel="..."
+                                    nextLabel=">"
+                                    onPageChange={handlePageClick}
+                                    pageRangeDisplayed={5}
+                                    pageCount={ Math.floor(rowsCount.current/NUM_ROWS_PAGE) < (rowsCount.current/NUM_ROWS_PAGE) ? 
+                                                (Math.floor(rowsCount.current/NUM_ROWS_PAGE) + 1) : (rowsCount.current/NUM_ROWS_PAGE)}
+                                    previousLabel="<"
+                                    className="pagination pagination-primary-soft d-inline-block d-md-flex rounded mb-0"
+                                    pageClassName="page-item mb-0"
+                                    pageLinkClassName="page-link"
+                                    previousClassName="page-item mb-0"
+                                    nextClassName="page-item mb-0"
+                                    previousLinkClassName="page-link"
+                                    nextLinkClassName="page-link"
+                                    activeClassName="active"
+                                    renderOnZeroPageCount={null}
+                                />
+                            </nav>
                         </div>
                         <div className={`${mapState.show === true ? 'p-0 col-md-5 d-none d-md-block' : 'd-none'} map-wrapper rounded-2`}>
                             <GoogleMapReact

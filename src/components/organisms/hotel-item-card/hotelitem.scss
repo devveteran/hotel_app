@@ -33,9 +33,14 @@
     }
 }
 .other-price {
-    background-color: var(--bs-gray-100) !important;
-    border-color: var(--bs-gray-100) !important;
+    background-color: #f3f4f5 !important;
+    border-color:  #f3f4f5 !important;
 }
 .other-price-div {
     max-width: 250px !important;
+}
+.recmd-price-section {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: #5143d920;
 }

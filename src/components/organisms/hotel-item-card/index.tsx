@@ -129,10 +129,9 @@ const HotelItemCard = ({viewMode, hotel, viewMap}: PropType) =>
                                         <b style={{color:'var(--bs-gray-900)'}}>
                                         {hotel.reviewRate}
                                         {
-                                            hotel.reviewRate >=4.5 ? ' - Excellent' : 
-                                                hotel.reviewRate >=4 ? ' - Very Good' :
-                                                    hotel.reviewRate >= 3.5 ? ' - Good' :
-                                                        hotel.reviewRate >= 3 ? '' : ''
+                                            hotel.reviewRate >=8.5 ? ' - Excellent' : 
+                                                hotel.reviewRate >=8 ? ' - Very Good' :
+                                                    hotel.reviewRate >= 7.5 ? ' - Good' : ''
                                         }
                                         </b> ({hotel.reviewCount} reviews)
                                     </li>
@@ -167,18 +166,30 @@ const HotelItemCard = ({viewMode, hotel, viewMap}: PropType) =>
                         </div>
                         <div className="col other-price-div">
                             <div className='d-flex rounded-2 flex-column h-100 p-2 justify-content-between'>
-                                <div className='d-flex flex-row align-items-center h-50'>
-                                    <h5 className="fw-bold mb-0 me-1 col ps-0">$750</h5>
-                                    <button className='btn btn-primary m-auto me-0 pt-1 pb-1'>View Deal {'>'}</button>
-                                </div>
-                                <div className='d-flex flex-row align-items-center justify-content-between gap-1 mt-2'>
-                                    <div className='col-md-5 rounded-2 p-1 ps-2 other-price'>
-                                        <span style={{fontSize:'0.8rem'}}>Expedia</span>
-                                        <h6 className='mb-0'>$110</h6>
+                                <div className='d-flex flex-column align-items-center h-50 recmd-price-section justify-content-between'>
+                                    <div className='d-flex flex-row col-md-12 align-items-center'>
+                                        <h6>Hotel.com</h6>
                                     </div>
-                                    <div className='col-md-7 rounded-2 p-1 ps-2 other-price'>
+                                    <div className='d-flex flex-row col-md-12 align-items-center'>
+                                        <h5 className="fw-bold mb-0 me-1 col ps-0">${hotel.priceBookings}</h5>
+                                        <button className='btn btn-primary m-auto me-0 pt-1 pb-1'>View Deal {'>'}</button>
+                                    </div>
+                                </div>
+                                <div className='d-flex flex-row align-items-center justify-content-between mt-2'>
+                                    <div className='col-md-5 rounded-2 p-1 ps-2 other-price me-2'>
+                                        <span style={{fontSize:'0.8rem'}}>Expedia</span>
+                                        <h6 className='mb-0'>${hotel.priceExpedia}</h6>
+                                    </div>
+                                    <div className='rounded-2 p-1 ps-2 other-price flex-grow-1'>
                                         <span style={{fontSize:'0.8rem'}}>Our lowest price</span>
-                                        <h6 className='mb-0'>$110</h6>
+                                        <h6 className='mb-0'>
+                                        ${
+                                            hotel.priceBookings > hotel.priceExpedia ?
+                                                hotel.priceExpedia > hotel.priceHotels ?
+                                                    hotel.priceHotels : hotel.priceExpedia
+                                            : hotel.priceBookings
+                                        }
+                                        </h6>
                                     </div>
                                 </div>
                             </div>
@@ -187,7 +198,7 @@ const HotelItemCard = ({viewMode, hotel, viewMap}: PropType) =>
                     {
                         detailTab !== '' ? (
                             <div className='row'>
-                                <DetailView selectedTab={detailTab} />
+                                <DetailView selectedTab={detailTab} hotel={hotel}/>
                             </div>
                         ) : null
                     }
