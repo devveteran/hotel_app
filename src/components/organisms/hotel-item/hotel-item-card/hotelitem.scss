@@ -11,6 +11,7 @@
 }
 .hotel-item-card .tns-item {
     overflow: hidden;
+    height: 100%;
 }
 .hotel-item-card .react-multi-carousel-item {
     padding: 0 3px;
@@ -43,4 +44,10 @@
     padding: 0.5rem;
     border-radius: 0.5rem;
     background-color: #5143d920;
+}
+.hotel-card-img {
+    max-height: 200px;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
 }

@@ -1,0 +1,10 @@
+.rating-slider .rating-track {
+    height: 8px;
+    background: rgba(var(--bs-primary-rgb), 0.1);
+    transform: translateY(-50%);
+    top: 50%;
+    border-radius: 10px;
+}
+.rating-slider .rating-track-1 {
+    background: rgb(19, 145, 210);
+}

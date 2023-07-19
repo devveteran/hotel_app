@@ -1,8 +1,8 @@
 import Header from "@containers/common/header";
 import BannerSection from "@containers/searchpage/bannersection";
 import LeftSearchPanel from "@containers/searchpage/searchpanel";
-import HotelItemCard from "@organisms/hotel-item-card";
-import { useEffect, useRef, useState } from "react";
+import HotelItemCard from "@organisms/hotel-item/hotel-item-card";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import './searchpage.scss';
 import Footer from "@containers/common/footer";
 import GoogleMapReact from 'google-map-react';
@@ -10,22 +10,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight, faMapMarkerAlt, faSlidersH } from "@fortawesome/free-solid-svg-icons";
 import ReactSlider from 'react-slider';
 import { Dropdown } from "react-bootstrap";
-import { CustomerRatingType, DBHotelInfo, HotelInfo, SearchParamType, StarRatingType, TopAmenities, initialCustomerRating, initialHotelInfo, initialStarRating } from "@constants/types";
-import { useSelector } from "react-redux";
+import { CustomerRatingType, DBHotelInfo, HotelInfo, MapViewState, SearchParamType, StarRatingType, TopAmenitiesForSearch, initialCustomerRating, initialHotelInfo, initialMapViewState, initialStarRating } from "@constants/types";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@store/index";
 import { userInstance } from "@services/axios";
 import ReactPaginate from 'react-paginate';
-
-export interface MapViewState {
-    show: boolean,
-    lat: number,
-    lon: number
-};
-export const initialMapViewState = {
-    show: false,
-    lat: 10,
-    lon: 10,
-}
+import { setMapViewState } from "@store/reducers/global";
 
 const MIN_PRICE = 500
 const MAX_PRICE = 2000
@@ -33,11 +23,12 @@ const NUM_ROWS_PAGE = 5
 
 const SearchPage = () => { 
     const searchParam = useSelector((state:RootState) => state.global.searchParam);
+    const mapState = useSelector((state:RootState) => state.global.mapState);
     const [scroll, setScroll] = useState(false);
     const [showSearchPanel, setShowSearchPanel] = useState(false);
     const [visibleToggleButton, setVisibleToggleButton] = useState(false);
     const [viewMode, setViewMode] = useState<string>('list');
-    const [mapState, setMapState] = useState<MapViewState>(initialMapViewState);
+    // const [mapState, setMapState] = useState<MapViewState>(initialMapViewState);
 
     const [hotelName, setHotelName] = useState<string>("");
     const [minPrice, setMinPrice] = useState<string>(MIN_PRICE.toFixed(2));
@@ -52,6 +43,8 @@ const SearchPage = () => {
     const [numHotels, setNumHotels] = useState<number>(0);
     const curPage = useRef<number>(1);
     const rowsCount = useRef<number>(0);
+    const refHotelSection = useRef<any>(null);
+    const dispatch = useDispatch();
 
     const onSelectHotelType = ( v: string ) => {
         setHotelTypeFilter(v);
@@ -159,9 +152,11 @@ const SearchPage = () => {
         userInstance().get(`/api/HotelInfoes/${urlparam}`).then((response) => {
             // console.log(response)
             const data = response.data as Array<DBHotelInfo>;
-            const aryHotels: Array<HotelInfo> = [];
+            let aryHotels: Array<HotelInfo> = [];
             data.forEach((ele, i:number) => {
-                let hotel: HotelInfo = initialHotelInfo;
+                let hotel: HotelInfo = JSON.parse(JSON.stringify(initialHotelInfo));
+                // hotel.photoURIs = [];
+
                 hotel.id = ele.id;
                 hotel.name = ele.name;
                 hotel.address = ele.address;
@@ -178,6 +173,8 @@ const SearchPage = () => {
                 let aryphotos = ele.photoURIs.split(";");
                 aryphotos.forEach((ele, i) => {
                     hotel.photoURIs.push(ele);
+                    // hotel.photoURIs = [...hotel.photoURIs, ele];
+                    // console.log(ele)
                 });
 
                 hotel.amenities = JSON.parse(ele.amenitiesJSON);
@@ -186,8 +183,10 @@ const SearchPage = () => {
 
                 hotel.guestNum = ele.guestNum;
                 hotel.roomNum = ele.roomNum;
-                hotel.getLon = 0;
-                hotel.geoLat = 0;
+                let arypos = ele.geoPosition.split(",");
+                hotel.getLon = parseFloat(arypos[0]);
+                hotel.geoLat = parseFloat(arypos[1]);
+
                 hotel.priceBookings = ele.priceBookings;
                 hotel.priceExpedia = ele.priceExpedia;
                 hotel.priceHotels = ele.priceHotels;
@@ -197,18 +196,18 @@ const SearchPage = () => {
                 hotel.priceHistoryBookings = JSON.parse(ele.priceHistoryBookings);
                 hotel.priceHistoryExpedia = JSON.parse(ele.priceHistoryExpedia);
                 hotel.priceHistoryHotels = JSON.parse(ele.priceHistoryHotels);
-                aryHotels.push({...hotel});
+                aryHotels.push(JSON.parse(JSON.stringify(hotel)));
             });
-            console.log(aryHotels)
-            setHotels([...aryHotels]);
+            setHotels(JSON.parse(JSON.stringify(aryHotels)));
         }).catch((error) => {
             console.log(error);
         });
     }
 
     useEffect(() => {
-        // console.log(hotels);
-    }, [hotels])
+        if (refHotelSection.current !== null)
+            refHotelSection.current.scrollIntoView(false);
+    }, [hotels]);
 
     const onChangeHotelName = (v: any) => {
         let val = v.target.value;
@@ -266,7 +265,7 @@ const SearchPage = () => {
     const toggleMap = () => {
         let tmp_mapState = {...mapState};
         tmp_mapState.show = !tmp_mapState.show;
-        setMapState(tmp_mapState);
+        dispatch(setMapViewState(tmp_mapState));
     }
     const toggleSearchPanel = () => {
         setShowSearchPanel(!showSearchPanel);
@@ -274,7 +273,7 @@ const SearchPage = () => {
 
     const viewMap = (v: MapViewState) => {
         let tv = {...v};
-        setMapState(tv);
+        dispatch(setMapViewState(tv));
     }
 
     const toggleViewMode = (v: string) => {
@@ -311,25 +310,18 @@ const SearchPage = () => {
         }
     }, [scroll, setScroll]);
 
-    // useLayoutEffect(() => {
-    //     function updateSize() {
-    //         const display = window.getComputedStyle(refButtonToggle.current).getPropertyValue("display");
-            
-    //         if (viewMode === 'list') {
-    //             if (display !== 'none'){
-    //                 setVisibleToggleButton(true);
-    //                 setShowSearchPanel(false);
-    //             }
-    //             else{
-    //                 setVisibleToggleButton(false);
-    //                 setShowSearchPanel(true);
-    //             }
-    //         }
-    //     }
-    //     window.addEventListener('resize', updateSize);
-    //     updateSize();
-    //     return () => window.removeEventListener('resize', updateSize);
-    // }, []);
+    useLayoutEffect(() => {
+        function updateSize() {
+            if (window.innerWidth < 1200) {
+                let tmp_mapState = {...mapState};
+                tmp_mapState.show = false;
+                dispatch(setMapViewState(tmp_mapState));
+            }
+        }
+        window.addEventListener('resize', updateSize);
+        updateSize();
+        return () => window.removeEventListener('resize', updateSize);
+    }, []);
 
     // useEffect(() => {
     //     function handleClickOutside(event: any) {
@@ -531,7 +523,7 @@ const SearchPage = () => {
                                             <label className="form-label">Amenities</label>
                                             <div className="row g-3">
                                                 {
-                                                    TopAmenities.map((ele, i) => {
+                                                    TopAmenitiesForSearch.map((ele, i) => {
                                                         return (
                                                             <div key={ele} className="col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                                                 <div className="form-check">
@@ -561,15 +553,21 @@ const SearchPage = () => {
                     {/* {
                         viewMode === 'list' ? ( */}
                     <div className='row'>
-                        <div className={`${mapState.show === true ? 'col-md-7' : ''}`}>
+                        <div className={`${mapState.show === true ? 'col-md-8' : ''}`}>
                             <div className='vstack gap-4'>
                                 {
                                     hotels.map((ele, i) => {
-                                        return (<HotelItemCard 
-                                        key={ele.id}
-                                        viewMode="list"
-                                        viewMap={viewMap}
-                                        hotel={ele}/>)
+                                        return (
+                                        <div key={ele.id}
+                                            ref={i=== 0 ? refHotelSection: null}>
+                                            <HotelItemCard 
+                                                key={ele.id}
+                                                viewMode="list"
+                                                viewMap={viewMap}
+                                                hotel={ele}
+                                            />
+                                        </div>
+                                        )
                                     })
                                 }
                             </div>
@@ -594,7 +592,7 @@ const SearchPage = () => {
                                 />
                             </nav>
                         </div>
-                        <div className={`${mapState.show === true ? 'p-0 col-md-5 d-none d-md-block' : 'd-none'} map-wrapper rounded-2`}>
+                        <div className={`${mapState.show === true ? 'p-0 col-md-4 d-none d-xl-block' : 'd-none'} map-wrapper rounded-2`}>
                             <GoogleMapReact
                                 center={{
                                     lat: mapState.lat,

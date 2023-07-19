@@ -143,7 +143,7 @@ export const initialStarRating : StarRatingType = {
     starFive: false,
 }
 
-export const TopAmenities = [
+export const TopAmenitiesForSearch = [
     "Air Conditioning",
     "Room Services",
     "Dining",
@@ -173,3 +173,14 @@ export const initialSearchParam : SearchParamType= {
     childNum: 0,
     roomNum: 0
 };
+
+export interface MapViewState {
+    show: boolean,
+    lat: number,
+    lon: number
+};
+export const initialMapViewState = {
+    show: false,
+    lat: 10,
+    lon: 10,
+}
