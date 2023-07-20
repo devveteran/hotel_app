@@ -8,6 +8,7 @@ export interface ReviewDescType {
     writer: string,
     review_date: string,
     stay_date: string,
+    review_from: '' | 'hotels' | 'booking' | 'expedia', // new
 }
 
 export interface PriceHistoryType {
@@ -49,6 +50,27 @@ export interface AmenityType {
     [arg: string] : Array<string>
 };
 
+export interface PriceFilterType {
+    freeCancel: boolean,
+    freeBreakfast: boolean,
+    payAtHotel: boolean,
+};
+
+export const initialPriceFilter: PriceFilterType = {
+    freeCancel: false,
+    freeBreakfast: false,
+    payAtHotel: false,
+};
+
+export interface OtherPrices {
+    from: '' | 'hotels' | 'booking' | 'expedia',
+    prices: Array<PriceInfo>
+}
+export const initialOtherPrices: OtherPrices = {
+    from: '',
+    prices: [],
+};
+
 export interface HotelInfo {
     id: number,
     name: string,
@@ -78,7 +100,9 @@ export interface HotelInfo {
     urlHotels: string,
     priceHistoryBookings: Array<PriceHistoryType>,
     priceHistoryExpedia: Array<PriceHistoryType>,
-    priceHistoryHotels: Array<PriceHistoryType>
+    priceHistoryHotels: Array<PriceHistoryType>,
+    
+    otherPrices: Array<OtherPrices>, //new
 }
 
 export const initialHotelInfo: HotelInfo = {
@@ -110,7 +134,27 @@ export const initialHotelInfo: HotelInfo = {
     urlHotels: '',
     priceHistoryBookings: [],
     priceHistoryExpedia: [],
-    priceHistoryHotels: []
+    priceHistoryHotels: [],
+
+    otherPrices: [], //new
+}
+
+export interface PriceInfo {
+    title: string,
+    featured: boolean,
+    price: number,
+    priceTwoNights: number,
+    url: string,
+    priceFeature: PriceFilterType,
+}
+
+export const initialPriceInfo : PriceInfo = {
+    title: '',
+    featured: false,
+    price: 0,
+    priceTwoNights: 0,
+    url: '',
+    priceFeature: {...initialPriceFilter},
 }
 
 export interface CustomerRatingType {

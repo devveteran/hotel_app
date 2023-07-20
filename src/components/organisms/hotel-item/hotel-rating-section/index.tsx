@@ -22,7 +22,7 @@ const HotelRatingSection = ({hotel, showButton}: PropType) => {
                             <span className="d-block mt-0">Excellent</span>
                         </div>
                         <div className="col-md-7 text-s text-end">
-                            <a className="mb-2 block" href="https://company.trivago.com/trivago-rating-index" target="_blank" rel="noopener noreferrer"><strong>trivago Rating Index</strong><sup>®</sup>&nbsp;based on <strong>5105</strong> reviews from: </a>
+                            <a className="mb-2 block text-primary-hover" href="https://company.trivago.com/trivago-rating-index" target="_blank" rel="noopener noreferrer"><strong>trivago Rating Index</strong><sup>®</sup>&nbsp;based on <strong>5105</strong> reviews from: </a>
                             <ul className="list-group mt-2">
                                 <li className="list-group-item border-0 p-0 text-grey-900" title="Read reviews on Hotels.com">
                                     <span><span className="fw-bold">Hotels.com 9.4</span>/10</span>
@@ -39,7 +39,7 @@ const HotelRatingSection = ({hotel, showButton}: PropType) => {
                 </article>
                 {
                     showButton === true ? (
-                        <footer className="text-end">
+                        <footer className="text-end mt-3">
                             <button type="button" className="btn btn-primary-check border">Show all reviews</button>
                         </footer>
                     ) : null

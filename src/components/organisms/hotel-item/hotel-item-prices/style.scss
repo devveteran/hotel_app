@@ -1,0 +1,14 @@
+.cursor-pointer {
+    cursor: pointer !important;
+}
+a, span.link, label.link {
+    user-select: none;
+}
+
+a:hover,
+label.link:hover {
+    text-decoration: underline !important;
+}
+// .chk-hover:hover {
+//     background-color: var(--bs-gray-100, 0.01) !important;
+// }

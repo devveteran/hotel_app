@@ -2,6 +2,7 @@ import { HotelInfo, MapViewState } from '@constants/types';
 import HotelItemInfo from '@organisms/hotel-item/hotel-item-info';
 import HotelItemOverview from '@organisms/hotel-item/hotel-item-overview';
 import HotelItemPhotos from '@organisms/hotel-item/hotel-item-photos';
+import HotelItemPrices from '@organisms/hotel-item/hotel-item-prices';
 import HotelItemReview from '@organisms/hotel-item/hotel-item-review';
 import { RootState } from '@store/index';
 import { useSelector } from 'react-redux';
@@ -39,7 +40,7 @@ const DetailView = ({selectedTab, hotel, hideDetailTab} : PropType) => {
                     <HotelItemReview hotel={hotel} />
                 </TabPanel>
                 <TabPanel>
-                    <h2>Prices</h2>
+                    <HotelItemPrices hotel={hotel}/>
                 </TabPanel>
             </Tabs>
             <div className="px-6 row d-flex justify-content-end pt-2 pb-2">

@@ -66,7 +66,7 @@ const HotelItemCard = ({viewMode, hotel, viewMap}: PropType) =>
     }, [hotel]);
 
     return viewMode === 'list' ? (
-        <div className="card shadow p-0 hotel-item-card" style={{cursor:'pointer'}}>
+        <div className="card shadow p-0 hotel-item-card">
             <div className="row g-0 flex-column flex-xxl-row flex-lg-row flex-xl-row flex-md-row pe-2">
                 <div className="position-relative hotel-card-image">
                     {/* <div className="position-absolute top-0 start-0 z-index-1 m-2">

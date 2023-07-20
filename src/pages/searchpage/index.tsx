@@ -179,7 +179,7 @@ const SearchPage = () => {
 
                 hotel.amenities = JSON.parse(ele.amenitiesJSON);
                 hotel.reviews = JSON.parse(ele.reviewsJSON);
-                hotel.reviewDescs = JSON.parse(ele.reviewDescsJSON);
+                hotel.reviewDescs = JSON.parse(ele.reviewDescsJSON).reviews;
 
                 hotel.guestNum = ele.guestNum;
                 hotel.roomNum = ele.roomNum;

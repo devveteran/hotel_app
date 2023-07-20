@@ -34,8 +34,8 @@
     }
 }
 .other-price {
-    background-color: #f3f4f5 !important;
-    border-color:  #f3f4f5 !important;
+    background-color: rgba(var(--bs-gray-100), 0.2) !important;
+    border-color:  rgba(var(--bs-gray-100), 0.2) !important;
 }
 .other-price-div {
     max-width: 250px !important;
