@@ -13,7 +13,6 @@ const HotelItemReview = ({hotel}: PropType) => {
     
     useEffect(() => {
         // console.log(hotel.reviews);
-        console.log(hotel.reviewDescs);
     });
 
     const toggleShowAllReviews = (v: boolean) => {
@@ -71,9 +70,9 @@ const HotelItemReview = ({hotel}: PropType) => {
                 }
                 {
                     showAllReviews === false ?
-                        <a className="fw-bold text-primary" onClick={() => toggleShowAllReviews(true)}>Show more reviews</a>
+                        <a className="fw-bold text-primary cursor-pointer link" onClick={() => toggleShowAllReviews(true)}>Show more reviews</a>
                     : 
-                        <a className="fw-bold text-primary" onClick={() => toggleShowAllReviews(false)}>Show less reviews</a>
+                        <a className="fw-bold text-primary cursor-pointer link" onClick={() => toggleShowAllReviews(false)}>Show less reviews</a>
                 }
             </div>
         </div>

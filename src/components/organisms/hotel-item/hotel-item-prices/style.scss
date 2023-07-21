@@ -5,10 +5,12 @@ a, span.link, label.link {
     user-select: none;
 }
 
-a:hover,
 label.link:hover {
     text-decoration: underline !important;
 }
-// .chk-hover:hover {
-//     background-color: var(--bs-gray-100, 0.01) !important;
-// }
+.chk-hover:hover {
+    background-color: var(--bs-gray-100) !important;
+}
+.form-check-input {
+    --bs-form-check-bg: white !important;
+}

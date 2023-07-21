@@ -1,0 +1,15 @@
+.review-brand-imgonly {
+    height: 16px;
+    object-fit: contain;
+    width: 20px;
+}
+
+.other-price-item-featured {
+    background-color: var(--bs-gray-100);
+}
+.other-price-item-featured:hover {
+    background-color: var(--bs-gray-200);
+}
+.other-price-item:hover {
+    background-color: var(--bs-gray-100);
+}

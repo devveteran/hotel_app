@@ -43,7 +43,14 @@ export interface DBHotelInfo {
     urlHotels: string,
     priceHistoryBookings: string,
     priceHistoryExpedia: string,
-    priceHistoryHotels: string
+    priceHistoryHotels: string,
+    reviewHotels: number,
+    reviewExpedia: number,
+    reviewBooking: number,
+    reviewCountHotels: number,
+    reviewCountExpedia: number,
+    reviewCountBooking: number,
+    otherPrices: string,
 }
 
 export interface AmenityType {
@@ -103,6 +110,12 @@ export interface HotelInfo {
     priceHistoryHotels: Array<PriceHistoryType>,
     
     otherPrices: Array<OtherPrices>, //new
+    reviewHotels: number,
+    reviewExpedia: number,
+    reviewBooking: number,
+    reviewCountHotels: number,
+    reviewCountExpedia: number,
+    reviewCountBooking: number,
 }
 
 export const initialHotelInfo: HotelInfo = {
@@ -137,6 +150,12 @@ export const initialHotelInfo: HotelInfo = {
     priceHistoryHotels: [],
 
     otherPrices: [], //new
+    reviewHotels: 0,
+    reviewExpedia: 0,
+    reviewBooking: 0,
+    reviewCountHotels: 0,
+    reviewCountExpedia: 0,
+    reviewCountBooking: 0,
 }
 
 export interface PriceInfo {

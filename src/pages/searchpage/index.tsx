@@ -152,6 +152,7 @@ const SearchPage = () => {
         userInstance().get(`/api/HotelInfoes/${urlparam}`).then((response) => {
             // console.log(response)
             const data = response.data as Array<DBHotelInfo>;
+            console.log(data);
             let aryHotels: Array<HotelInfo> = [];
             data.forEach((ele, i:number) => {
                 let hotel: HotelInfo = JSON.parse(JSON.stringify(initialHotelInfo));
@@ -169,6 +170,18 @@ const SearchPage = () => {
                 hotel.checkout = ele.checkout;
                 hotel.fax = ele.fax;
                 hotel.telephone = ele.telephone;
+                hotel.reviewHotels = ele.reviewHotels;
+                hotel.reviewExpedia = ele.reviewExpedia;
+                hotel.reviewBooking = ele.reviewBooking;
+                hotel.reviewCountHotels= ele.reviewCountHotels;
+                hotel.reviewCountExpedia= ele.reviewCountExpedia;
+                hotel.reviewCountBooking= ele.reviewCountBooking;
+
+                try {
+                    hotel.otherPrices = JSON.parse(ele.otherPrices);
+                } catch (error) {
+                    hotel.otherPrices = [];
+                }
 
                 let aryphotos = ele.photoURIs.split(";");
                 aryphotos.forEach((ele, i) => {
@@ -177,9 +190,23 @@ const SearchPage = () => {
                     // console.log(ele)
                 });
 
-                hotel.amenities = JSON.parse(ele.amenitiesJSON);
-                hotel.reviews = JSON.parse(ele.reviewsJSON);
-                hotel.reviewDescs = JSON.parse(ele.reviewDescsJSON).reviews;
+                try {
+                    hotel.amenities = JSON.parse(ele.amenitiesJSON);
+                } catch (error) {
+                    hotel.amenities = {};
+                }
+
+                try {
+                    hotel.reviews = JSON.parse(ele.reviewsJSON);
+                } catch (error) {
+                    hotel.reviews = [];
+                }
+                
+                try {
+                    hotel.reviewDescs = JSON.parse(ele.reviewDescsJSON).reviews;
+                } catch (error) {
+                    hotel.reviewDescs = [];
+                }
 
                 hotel.guestNum = ele.guestNum;
                 hotel.roomNum = ele.roomNum;
@@ -193,9 +220,25 @@ const SearchPage = () => {
                 hotel.urlHotels = ele.urlHotels;
                 hotel.urlExpedia = ele.urlExpedia;
                 hotel.urlBookings = ele.urlBookings;
-                hotel.priceHistoryBookings = JSON.parse(ele.priceHistoryBookings);
-                hotel.priceHistoryExpedia = JSON.parse(ele.priceHistoryExpedia);
-                hotel.priceHistoryHotels = JSON.parse(ele.priceHistoryHotels);
+
+                try{
+                    hotel.priceHistoryBookings = JSON.parse(ele.priceHistoryBookings);
+                } catch (error) {
+                    hotel.priceHistoryBookings = [];
+                }
+
+                try {
+                    hotel.priceHistoryExpedia = JSON.parse(ele.priceHistoryExpedia);
+                } catch (error) {
+                    hotel.priceHistoryExpedia = [];
+                }
+                
+                try {
+                    hotel.priceHistoryHotels = JSON.parse(ele.priceHistoryHotels);
+                } catch (error) {
+                    hotel.priceHistoryHotels = [];
+                }
+                
                 aryHotels.push(JSON.parse(JSON.stringify(hotel)));
             });
             setHotels(JSON.parse(JSON.stringify(aryHotels)));

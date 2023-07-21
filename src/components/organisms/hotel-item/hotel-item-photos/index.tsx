@@ -47,11 +47,11 @@ const HotelItemPhotos = ({hotel}: PropType ) => {
             <div className="position-relative mb-2 d-none d-xl-block">
                 <div className="row row-cols-4 mb-0 px-4">
                     {
-                        [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16].map((ele, i) => {
+                        hotel.photoURIs.map((ele, i) => {
                             return (
                                 <li key={ele} className="list-group-item">
-                                    <img className="rounded-3 d-sm-block w-100 p-1 hotel-card-img" 
-                                    src={`${server}/Images/${hotel.id}/${i<9 && i > 0 ? i : i===0 ? 1 : (i-8)}.webp`} draggable="false"/>
+                                    <img className="rounded-3 d-sm-block w-100 p-1 hotel-card-img cursor-pointer" 
+                                    src={`${server}/Images/${hotel.name}/${ele}`} draggable="false"/>
                                 </li>
                             )
                         })
@@ -81,10 +81,10 @@ const HotelItemPhotos = ({hotel}: PropType ) => {
                     // rewind={true}
                 >
                     {
-                        [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16].map((ele, i) => {
+                        hotel.photoURIs.map((ele, i) => {
                             return (
                                 <div key={ele} className="tns-item rounded-2 d-flex justify-content-center">
-                                    <img src={`${server}/Images/${hotel.id}/${i<9 && i > 0 ? i : i===0 ? 1 : (i-8)}.webp`} draggable="false"/>
+                                    <img src={`${server}/Images/${hotel.name}/${ele}`} draggable="false"/>
                                 </div>
                             )
                         })

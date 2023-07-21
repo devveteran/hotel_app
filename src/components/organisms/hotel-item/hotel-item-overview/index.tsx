@@ -6,32 +6,45 @@ import { RootState } from "@store/index";
 import BarChart from "./barchart";
 import HotelAmenities from "@organisms/hotel-item/hotel-amenities-section";
 import HotelRatingSection from "../hotel-rating-section";
+import { server } from "@services/axios";
 
 interface PropType {
     hotel: HotelInfo;
+    viewDetail: (v: string) => void,
 }
 
-const HotelItemOverview = ({hotel}: PropType) => {
+const HotelItemOverview = ({hotel, viewDetail}: PropType) => {
     const mapState = useSelector((state:RootState) => state.global.mapState);
     
     return (
         <div>
             <div role="tabpanel" id="tabs-211-panel-0" aria-labelledby="tabs-211-tab-0" className="w-full">
                 <div className="mt-4 px-1 d-flex justify-content-center relative gap-1" aria-hidden="true">
-                    <img className="rounded-2 d-sm-block" src="https://imgcy.trivago.com/c_fill,d_dummy.jpeg,f_auto,h_190,q_auto,w_240//partnerimages/16/19/1619215994.jpeg" draggable="false" alt=""/>
-                    <img className="rounded-2 d-none d-sm-block"src="https://imgcy.trivago.com/c_fill,d_dummy.jpeg,f_auto,h_190,q_auto,w_240//uploadimages/47/15/47150778.jpeg" draggable="false" alt=""/>
-                    <img className="rounded-2 d-none d-md-block" src="https://imgcy.trivago.com/c_fill,d_dummy.jpeg,f_auto,h_190,q_auto,w_240//uploadimages/47/15/47150672.jpeg" draggable="false" alt=""/>
-                    <img className="rounded-2 d-none d-xl-block" src="https://imgcy.trivago.com/c_fill,d_dummy.jpeg,f_auto,h_190,q_auto,w_240//uploadimages/47/15/47150588.jpeg" draggable="false" alt=""/>
+                    <img className="rounded-2 d-sm-block cursor-pointer" 
+                        src={`${server}/Images/${hotel.name}/${hotel.photoURIs[0]}`} draggable="false"
+                        onClick={() => viewDetail("photos")}/>
+                    <img className="rounded-2 d-none d-sm-block cursor-pointer" 
+                        src={`${server}/Images/${hotel.name}/${hotel.photoURIs[1]}`} draggable="false"
+                        onClick={() => viewDetail("photos")}/>
+                    <img className="rounded-2 d-none d-md-block cursor-pointer" 
+                        src={`${server}/Images/${hotel.name}/${hotel.photoURIs[2]}`} draggable="false"
+                        onClick={() => viewDetail("photos")}/>
+                    <img className="rounded-2 d-none d-xl-block cursor-pointer" 
+                        src={`${server}/Images/${hotel.name}/${hotel.photoURIs[3]}`} draggable="false"
+                        onClick={() => viewDetail("photos")}/>
                 </div>
                 <footer className="mt-3 px-4 text-end">
-                    <button type="button" className="btn btn-primary-check bg-white text-s font-bold px-3 leading-none h-8 border rounded-2 border-grey-700">Show all photos</button>
+                    <label className="btn btn-primary-check bg-white text-s font-bold px-3 leading-none h-8 border rounded-2 border-grey-700"
+                        onClick={() => viewDetail("photos")}>
+                        Show all photos
+                    </label>
                 </footer>
                 <div className="px-4 pt-2">
                     <div className="pb-2 mb-2">
                         <section className="pt-0">
                             <p className="fw-bold fs-5 pb-0 mb-2 text-grey-900">Price trend</p>
                             <p className="fst-italic text-m" data-testid="date-nav-legal-text-label">
-                                Based on average prices on trivago from the last 30 days
+                                Based on average prices on our application from the last 30 days
                             </p>
                             <div className="relative inline-flex items-end h-32 mb-10 mt-13 w-full">
                                 <div className="relative h-full flex items-end m-auto">
@@ -41,7 +54,8 @@ const HotelItemOverview = ({hotel}: PropType) => {
                             <div className="w-100 d-flex justify-content-end">
                                 <button type="button" 
                                 className="btn btn-primary-check border" data-testid="date-nav-deals-cta">
-                                    <span className="flex items-center justify-center">
+                                    <span className="flex items-center justify-center"
+                                        onClick={() => viewDetail("prices")}>
                                         Show all prices
                                         <span className="inline-flex leading-none transform stroke-current flex-shrink-0 ml-3">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="pointer-events-none max-h-full max-w-full">
@@ -57,9 +71,10 @@ const HotelItemOverview = ({hotel}: PropType) => {
                     </div>
                     <div className="row d-flex">
                         <div className={`${mapState.show === true ? 'w-100' : 'col-md-7'}`}>
-                            <HotelRatingSection hotel={hotel} showButton={true}/>
+                            <HotelRatingSection hotel={hotel} showButton={true} viewDetail={viewDetail}/>
                             <div className="mb-6" />
-                            <HotelAmenities amenities={hotel.amenities} />
+                            <HotelAmenities amenities={hotel.amenities} buttonLeft={false} showAll={false} 
+                                toggleAllAmenities = {() => viewDetail('info-all')}/>
                         </div>
                         {
                             mapState.show === false ? (

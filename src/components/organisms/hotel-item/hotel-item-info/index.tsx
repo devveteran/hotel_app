@@ -1,11 +1,15 @@
 import { HotelInfo } from "@constants/types"
 import HotelAmenities from "@organisms/hotel-item/hotel-amenities-section";
 import GoogleMapReact from 'google-map-react';
+import { useState } from "react";
 
 interface PropType {
     hotel: HotelInfo,
+    showAll: boolean,
 }
-const HotelItemInfo = ({hotel}: PropType) => {
+const HotelItemInfo = ({hotel, showAll}: PropType) => {
+    const [showAllAmenities, setShowAllAmenities] = useState<boolean>(showAll);
+    
     return (
     <div>
         <div className="row pt-5 pb-4 px-4">
@@ -13,7 +17,8 @@ const HotelItemInfo = ({hotel}: PropType) => {
             <p className="text-grey-900 pt-3">{hotel.description}</p>
         </div>
         <div className="px-4">
-            <HotelAmenities amenities={hotel.amenities} />
+            <HotelAmenities amenities={hotel.amenities} buttonLeft={true} showAll={showAllAmenities} 
+                toggleAllAmenities={() => setShowAllAmenities(!showAllAmenities)}/>
         </div>
         
         <div className="pt-0 px-0">
@@ -40,7 +45,7 @@ const HotelItemInfo = ({hotel}: PropType) => {
         <div className="pt-3 pb-6 px-4 text-grey-900">
             <h6 className='pt-3 pb-2'>Contact</h6>
             <span className='d-block'>{hotel.address}</span>
-            <span>Telephone: {hotel.telephone} | Fax: {hotel.fax} | <a href={hotel.url}>Official Homepage</a></span>
+            <span>Telephone: {hotel.telephone} | Fax: {hotel.fax} | <a target="_blank" href={hotel.url}>Official Homepage</a></span>
         </div>
     </div>
     )

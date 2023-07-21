@@ -33,8 +33,8 @@
         width: 100%;
     }
 }
-.other-price {
-    background-color: rgba(var(--bs-gray-100), 0.2) !important;
+.other-price:hover {
+    background-color: var(--bs-gray-100) !important;
     border-color:  rgba(var(--bs-gray-100), 0.2) !important;
 }
 .other-price-div {
@@ -45,9 +45,16 @@
     border-radius: 0.5rem;
     background-color: #5143d920;
 }
+.recmd-price-section:hover {
+    background-color: #5143d930;
+}
+
 .hotel-card-img {
     max-height: 200px;
     object-fit: cover;
     width: 100%;
     height: 100%;
+}
+.card-item-hover:hover {
+    background-color: var(--bs-gray-100);
 }
