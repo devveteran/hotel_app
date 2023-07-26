@@ -5,9 +5,9 @@ import HotelItemCard from "@organisms/hotel-item/hotel-item-card";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import './searchpage.scss';
 import Footer from "@containers/common/footer";
-import GoogleMapReact from 'google-map-react';
+import GoogleMap from 'google-map-react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight, faMapMarkerAlt, faSlidersH } from "@fortawesome/free-solid-svg-icons";
+import { faAngleLeft, faAngleRight, faLocation, faMapMarkerAlt, faSlidersH } from "@fortawesome/free-solid-svg-icons";
 import ReactSlider from 'react-slider';
 import { Dropdown } from "react-bootstrap";
 import { CustomerRatingType, DBHotelInfo, HotelInfo, MapViewState, SearchParamType, StarRatingType, TopAmenitiesForSearch, initialCustomerRating, initialHotelInfo, initialMapViewState, initialStarRating } from "@constants/types";
@@ -16,10 +16,13 @@ import { RootState } from "@store/index";
 import { userInstance } from "@services/axios";
 import ReactPaginate from 'react-paginate';
 import { setMapViewState } from "@store/reducers/global";
+import HotelMapMarker from "@organisms/hotel-item/hotel-marker-map";
 
 const MIN_PRICE = 500
 const MAX_PRICE = 2000
 const NUM_ROWS_PAGE = 5
+
+// const HotelMarker = ({ text, lat, lng }: {text: string, lat: number, lng: number}) => <div>{text}</div>;
 
 const SearchPage = () => { 
     const searchParam = useSelector((state:RootState) => state.global.searchParam);
@@ -28,7 +31,7 @@ const SearchPage = () => {
     const [showSearchPanel, setShowSearchPanel] = useState(false);
     const [visibleToggleButton, setVisibleToggleButton] = useState(false);
     const [viewMode, setViewMode] = useState<string>('list');
-    // const [mapState, setMapState] = useState<MapViewState>(initialMapViewState);
+    const [mapCenterPos, setMapCenterPos] = useState<MapViewState>(initialMapViewState);
 
     const [hotelName, setHotelName] = useState<string>("");
     const [minPrice, setMinPrice] = useState<string>(MIN_PRICE.toFixed(2));
@@ -50,6 +53,26 @@ const SearchPage = () => {
         setHotelTypeFilter(v);
     }
 
+    const setExtent =  (map: any, maps: any) => {
+        let places = JSON.parse(JSON.stringify(hotels)) as Array<HotelInfo>
+        places.map(place => {
+            new maps.Marker({
+                position: {
+                    lat: place.geoLat,
+                    lng: place.getLon,
+                },
+                map,
+            });})
+
+        var bounds = new maps.LatLngBounds()
+        for (let place of places) {
+            bounds.extend(
+                new maps.LatLng(place.geoLat, place.getLon)
+            )
+        }
+        map.fitBounds(bounds)
+    }
+
     useEffect(() => {
         onClickScrollToTop();
     }, []);
@@ -66,6 +89,15 @@ const SearchPage = () => {
         curPage.current = v.selected + 1;
         searchHotels();
     }
+    
+    const onHotelItemHover = (e: any, hotel: HotelInfo) => {
+        setMapCenterPos({...mapCenterPos, lat: hotel.geoLat, lon:hotel.getLon });
+    }
+
+    const onChangeMap = (v: any) => {
+        console.log(v);
+    }
+
     const searchHotels = async () => {
         let strCustomerRating = "";
         
@@ -249,7 +281,17 @@ const SearchPage = () => {
 
     useEffect(() => {
         if (refHotelSection.current !== null)
-            refHotelSection.current.scrollIntoView(false);
+            refHotelSection.current.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+        if (hotels.length > 0) {
+            let totalLat: number = 0;
+            let totalLon: number = 0;
+            hotels.forEach((e, i) => {
+                totalLat += e.geoLat;
+                totalLon += e.getLon;
+            })
+            console.log(totalLat/hotels.length, totalLon/hotels.length)
+            setMapCenterPos({...initialMapViewState, lat:(totalLat/hotels.length), lon: (totalLon / hotels.length)});
+        }
     }, [hotels]);
 
     const onChangeHotelName = (v: any) => {
@@ -307,8 +349,10 @@ const SearchPage = () => {
 
     const toggleMap = () => {
         let tmp_mapState = {...mapState};
-        tmp_mapState.show = !tmp_mapState.show;
-        dispatch(setMapViewState(tmp_mapState));
+        if (hotels.length > 0) {
+            tmp_mapState.show = !tmp_mapState.show;
+            dispatch(setMapViewState(tmp_mapState));
+        }
     }
     const toggleSearchPanel = () => {
         setShowSearchPanel(!showSearchPanel);
@@ -601,8 +645,9 @@ const SearchPage = () => {
                                 {
                                     hotels.map((ele, i) => {
                                         return (
-                                        <div key={ele.id}
-                                            ref={i=== 0 ? refHotelSection: null}>
+                                        <div key={"hotel_" + ele.id}
+                                            ref={i=== 0 ? refHotelSection: null}
+                                            onMouseOver={(e) => onHotelItemHover(e, ele)}>
                                             <HotelItemCard 
                                                 key={ele.id}
                                                 viewMode="list"
@@ -636,16 +681,18 @@ const SearchPage = () => {
                             </nav>
                         </div>
                         <div className={`${mapState.show === true ? 'p-0 col-md-4 d-none d-xl-block' : 'd-none'} map-wrapper rounded-2`}>
-                            <GoogleMapReact
-                                center={{
-                                    lat: mapState.lat,
-                                    lng: mapState.lon
+                            <GoogleMap
+                                defaultCenter={{
+                                    lat: mapCenterPos.lat,
+                                    lng: mapCenterPos.lon
                                 }}
+                                // onChange={onChangeMap}
                                 bootstrapURLKeys={{ key: "" }}
                                 // yesIWantToUseGoogleMapApiInternals
-                                defaultZoom={11}
+                                defaultZoom={8}
+                                onGoogleApiLoaded={({map, maps}: {map:any, maps:any}) => setExtent(map, maps)}
                             >
-                            </GoogleMapReact>
+                            </GoogleMap>
                         </div>
                     </div>
                 </div>

@@ -4,6 +4,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { server } from "@services/axios";
 import { useEffect, useRef, useState } from "react";
+import PhotoViewer from "@containers/searchpage/photo-viewer";
 
 interface PropType {
     hotel: HotelInfo,
@@ -30,6 +31,11 @@ const HotelItemPhotos = ({hotel}: PropType ) => {
     const refCarousel = useRef<any>(null);
     const [currentSlide, setCurrentSlide] = useState<number>(0);
     const [totalSlides, setTotalSlides] = useState<number>(0);
+    const [photoViewer, setPhotoViewer] = useState<boolean>(false);
+
+    const showPhotoViewer = () => {
+        setPhotoViewer(true);
+    }
 
     const updateLabelCarousel = () => {
         if (refCarousel.current !== null) {
@@ -43,7 +49,7 @@ const HotelItemPhotos = ({hotel}: PropType ) => {
     }, []);
 
     return (
-        <div>
+        <div className='position-relative'>
             <div className="position-relative mb-2 d-none d-xl-block">
                 <div className="row row-cols-4 mb-0 px-4">
                     {
@@ -58,7 +64,8 @@ const HotelItemPhotos = ({hotel}: PropType ) => {
                     }
                 </div>
                 <div className='position-absolute w-100 bg-gradient-bottom pb-2 px-0 mx-0' >
-                    <label className='btn border-dark btn-white' style={{left:'50%', transform:'translateX(-50%)'}}>
+                    <label className='btn border-dark btn-white' style={{left:'50%', transform:'translateX(-50%)'}}
+                        onClick={showPhotoViewer}>
                         Show more photos
                     </label>
                 </div>
@@ -96,6 +103,11 @@ const HotelItemPhotos = ({hotel}: PropType ) => {
                     </span>
                 </div>
             </div>
+            {
+                photoViewer === true ? (
+                    <PhotoViewer hotel={hotel} />
+                ) : null
+            }
         </div>
     )
 }

@@ -152,32 +152,6 @@ const HotelItemCard = ({viewMode, hotel, viewMap}: PropType) =>
                                 </a>
                                 <svg xmlns="http://www.w3.org/2000/svg" style={{transform:'rotate(90deg)', color:'var(--bs-gray-900)'}} width="24" height="24" viewBox="0 0 24 24" className="pointer-events-none max-h-full max-w-full"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeMiterlimit="10" strokeWidth="2"><path vectorEffect="non-scaling-stroke" d="M10 17l5-5M10 7l5 5"></path></g></svg>
                             </ul>
-                            {/* <ul className="nav nav-divider mt-3">
-                                <li className="nav-item">Air Conditioning</li>
-                                <li className="nav-item">Wifi</li>
-                                <li className="nav-item">Kitchen</li>
-                                <li className="nav-item"><a href="#" className="mb-0 text-primary">More+</a></li>
-                            </ul> */}
-
-                            {/* <ul className="list-group list-group-borderless small mb-0 mt-2">
-                                <li className="list-group-item d-flex text-success p-0">
-                                    <i className="bi bi-patch-check-fill me-2"></i>Free Cancellation till 7 Jan 2022
-                                </li>
-                                <li className="list-group-item d-flex text-success p-0">
-                                    <i className="bi bi-patch-check-fill me-2"></i>Free Breakfast
-                                </li>
-                            </ul> */}
-                            
-                            {/* <div className="d-sm-flex justify-content-sm-between align-items-center mt-3 mt-md-auto">
-                                <div className="d-flex align-items-center">
-                                    <h5 className="fw-bold mb-0 me-1">$750</h5>
-                                    <span className="mb-0 me-2">/day</span>
-                                    <span className="text-decoration-line-through mb-0">$1000</span>
-                                </div>
-                                <div className="mt-3 mt-sm-0">
-                                    <a href="#" className="btn btn-sm btn-dark mb-0 w-100">Select Room</a>    
-                                </div>
-                            </div> */}
                         </div>
                     </div>
                     <div className="col other-price-div">

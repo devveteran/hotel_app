@@ -244,6 +244,6 @@ export interface MapViewState {
 };
 export const initialMapViewState = {
     show: false,
-    lat: 10,
-    lon: 10,
+    lat: 0,
+    lon: 0,
 }

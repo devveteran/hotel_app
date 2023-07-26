@@ -1,12 +1,14 @@
 import { HotelInfo } from "@constants/types"
 import './style.scss';
-import GoogleMapReact from 'google-map-react';
+import GoogleMap from 'google-map-react';
 import { useSelector } from "react-redux";
 import { RootState } from "@store/index";
 import BarChart from "./barchart";
 import HotelAmenities from "@organisms/hotel-item/hotel-amenities-section";
 import HotelRatingSection from "../hotel-rating-section";
 import { server } from "@services/axios";
+import HotelMapMarker from "../hotel-marker-map";
+import { useState } from "react";
 
 interface PropType {
     hotel: HotelInfo;
@@ -15,7 +17,30 @@ interface PropType {
 
 const HotelItemOverview = ({hotel, viewDetail}: PropType) => {
     const mapState = useSelector((state:RootState) => state.global.mapState);
+    const [mapCenter, setMapCenter] = useState<any>({lat: hotel.geoLat, lng:hotel.getLon});
     
+    const setExtent =  (map: any, maps: any) => {
+        let p = JSON.parse(JSON.stringify(hotel)) as HotelInfo
+        let places = [p]
+        places.map(place => {
+            new maps.Marker({
+                position: {
+                    lat: place.geoLat,
+                    lng: place.getLon,
+                },
+                map
+            });
+        })
+
+        var bounds = new maps.LatLngBounds()
+        for (let place of places) {
+            bounds.extend(
+                new maps.LatLng(place.geoLat, place.getLon)
+            )
+        }
+        map.fitBounds(bounds)
+    }
+
     return (
         <div>
             <div role="tabpanel" id="tabs-211-panel-0" aria-labelledby="tabs-211-tab-0" className="w-full">
@@ -73,7 +98,7 @@ const HotelItemOverview = ({hotel, viewDetail}: PropType) => {
                         <div className={`${mapState.show === true ? 'w-100' : 'col-md-7'}`}>
                             <HotelRatingSection hotel={hotel} showButton={true} viewDetail={viewDetail}/>
                             <div className="mb-6" />
-                            <HotelAmenities amenities={hotel.amenities} buttonLeft={false} showAll={false} 
+                            <HotelAmenities hotelId={hotel.id} amenities={hotel.amenities} buttonLeft={false} showAll={false} 
                                 toggleAllAmenities = {() => viewDetail('info-all')}/>
                         </div>
                         {
@@ -81,16 +106,19 @@ const HotelItemOverview = ({hotel, viewDetail}: PropType) => {
                                 <div className="col-md-5">
                                     <div className="w-100 h-100 pb-4 ps-3">
                                         <div className="position-relative w-100 h-100">
-                                            <GoogleMapReact
-                                                center={{
-                                                    lat: hotel.geoLat,
-                                                    lng: hotel.getLon
+                                            <GoogleMap
+                                                defaultCenter={{
+                                                    lat: mapCenter.lat,
+                                                    lng: mapCenter.lng
                                                 }}
                                                 bootstrapURLKeys={{ key: "" }}
                                                 // yesIWantToUseGoogleMapApiInternals
                                                 defaultZoom={10}
+                                                onGoogleApiLoaded={({map, maps}: {map:any, maps:any}) => setExtent(map, maps)}                                                
                                             >
-                                            </GoogleMapReact>
+                                                {/* <HotelMapMarker hotel={hotel} text={"www"} 
+                                                lat={hotel.geoLat} lng={hotel.getLon}/> */}
+                                            </GoogleMap>
                                             <label className="position-absolute btn border-dark btn-white" style={{left:'50%', transform:'translateX(-50%)', bottom:'1rem'}}>
                                                 Location info
                                             </label>

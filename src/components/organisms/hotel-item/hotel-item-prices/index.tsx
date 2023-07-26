@@ -76,17 +76,35 @@ const HotelItemPrices = ({hotel}: PropType) => {
                 refScrollTargetAfterCollapsed.current.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
             setCollapsedSection("");
         }
-    }, [collapsedSection])
+    }, [collapsedSection]);
 
     const getOtherprices = (ele: OtherPrices) => {
         let ary = [];
-        ele.prices.filter(e => (e.featured === true)).sort((a, b) => a.price > b.price ? 1 : -1).forEach((info, j) => {
+        ele.prices.filter(e => 
+            (
+                e.featured === true && 
+                (filter.freeCancel === true ? e.priceFeature.freeCancel===true : true) &&
+                (filter.freeBreakfast === true ? e.priceFeature.freeBreakfast===true : true) &&
+                (filter.payAtHotel === true ? e.priceFeature.payAtHotel===true : true)
+            )
+        )
+        .sort((a, b) => a.price > b.price ? 1 : -1)
+        .forEach((info, j) => {
              ary.push(<PriceItem price={info} from={`${j === 0 ? ele.from : ''}`}/>);
-        })
-        ele.prices.filter(e => (e.featured === false)).sort((a, b) => a.price > b.price ? 1 : -1).forEach((info, j) => {
+        });
+        ele.prices.filter(e => 
+            (
+                e.featured === false && 
+                (filter.freeCancel === true ? e.priceFeature.freeCancel===true : true) &&
+                (filter.freeBreakfast === true ? e.priceFeature.freeBreakfast===true : true) &&
+                (filter.payAtHotel === true ? e.priceFeature.payAtHotel===true : true)
+            )
+        )
+        .sort((a, b) => a.price > b.price ? 1 : -1)
+        .forEach((info, j) => {
             ary.push(<PriceItem price={info} 
                 from={`${j === 0 && (ele.prices.filter(fe => (fe.featured === true)).length === 0) ? ele.from : ''}`}/>);
-        })
+        });
         ary.push(<label className="text-primary link p-2 w-100 cursor-pointer ms-4" onClick={() => toggleExpand(ele.from)}>Show fewer deals</label>);        
         
         return <div>
@@ -139,32 +157,98 @@ const HotelItemPrices = ({hotel}: PropType) => {
                 {
                     hotel.otherPrices.map((ele, i) => {
                         if(expandedFrom[ele.from] && expandedFrom[ele.from] === true) {
-                            return <div key={ele.from} className="border rounded-2 mb-3">
-                                {getOtherprices(ele)}
-                            </div>
-                            
-                        } else {
-                            if (ele.prices.filter(e => (e.featured === true)).length > 0) {
-                                return <div className="rounded-2 border mb-3" ref={ele.from === collapsedSection ? refScrollTargetAfterCollapsed : null}>
-                                    <PriceItem 
-                                        price = {
-                                            ele.prices.filter(e => (e.featured === true)).sort((a, b) => a.price > b.price ? 1 : -1).at(0) || initialPriceInfo
-                                        } 
-                                        from={ele.from}/>
-                                    <label className="text-primary p-2 link cursor-pointer w-100 ms-4" onClick={() => toggleExpand(ele.from)}>
-                                        Show {ele.prices.length - 1} more prices from {ele.from}.com
-                                    </label>
+                            if (ele.prices.filter(e => 
+                                (
+                                    (filter.freeCancel === true ? e.priceFeature.freeCancel===true : true) &&
+                                    (filter.freeBreakfast === true ? e.priceFeature.freeBreakfast===true : true) &&
+                                    (filter.payAtHotel === true ? e.priceFeature.payAtHotel===true : true)
+                                )
+                            ).length > 0) {
+                                return <div key={hotel.id + "_" + ele.from + "_" + i} className="border rounded-2 mb-3">
+                                    {getOtherprices(ele)}
                                 </div>
-                            } else {
-                                return <div className="rounded-2 border mb-3" ref={ele.from === collapsedSection ? refScrollTargetAfterCollapsed : null}>
+                            } else return null
+                        } else {
+                            if (ele.prices.filter(e => 
+                                ( e.featured === true &&
+                                    (filter.freeCancel === true ? e.priceFeature.freeCancel===true : true) &&
+                                    (filter.freeBreakfast === true ? e.priceFeature.freeBreakfast===true : true) &&
+                                    (filter.payAtHotel === true ? e.priceFeature.payAtHotel===true : true)
+                                )
+                            ).length > 0) {
+                                return <div key={hotel.id + "_" + ele.from + "_" + i} className="rounded-2 border mb-3" ref={ele.from === collapsedSection ? refScrollTargetAfterCollapsed : null}>
                                     <PriceItem 
                                         price = {
-                                            ele.prices.sort((a, b) => a.price > b.price ? 1 : -1).at(0) || initialPriceInfo
+                                            ele.prices.filter(e => 
+                                                (
+                                                    e.featured === true  &&
+                                                    (filter.freeCancel === true ? e.priceFeature.freeCancel===true : true) &&
+                                                    (filter.freeBreakfast === true ? e.priceFeature.freeBreakfast===true : true) &&
+                                                    (filter.payAtHotel === true ? e.priceFeature.payAtHotel===true : true)
+                                                )
+                                            )
+                                            .sort((a, b) => a.price > b.price ? 1 : -1).at(0) || initialPriceInfo
+                                        }
+                                        from={ele.from} />
+                                    {
+                                        (ele.prices.filter(e => 
+                                            (
+                                                (filter.freeCancel === true ? e.priceFeature.freeCancel===true : true) &&
+                                                (filter.freeBreakfast === true ? e.priceFeature.freeBreakfast===true : true) &&
+                                                (filter.payAtHotel === true ? e.priceFeature.payAtHotel===true : true)
+                                            )
+                                        ).length - 1) > 0 ? (
+                                            <label className="text-primary p-2 link cursor-pointer w-100 ms-4" onClick={() => toggleExpand(ele.from)}>
+                                                Show {ele.prices.filter(e => 
+                                                (
+                                                    (filter.freeCancel === true ? e.priceFeature.freeCancel===true : true) &&
+                                                    (filter.freeBreakfast === true ? e.priceFeature.freeBreakfast===true : true) &&
+                                                    (filter.payAtHotel === true ? e.priceFeature.payAtHotel===true : true)
+                                                )
+                                            ).length - 1} more prices from {ele.from}.com
+                                            </label>
+                                        ) : null
+                                    }
+                                </div>
+                            } else if(ele.prices.filter(e => 
+                                (
+                                    (filter.freeCancel === true ? e.priceFeature.freeCancel===true : true) &&
+                                    (filter.freeBreakfast === true ? e.priceFeature.freeBreakfast===true : true) &&
+                                    (filter.payAtHotel === true ? e.priceFeature.payAtHotel===true : true)
+                                )
+                            ).length > 0){
+                                return <div key={hotel.id + "_" + ele.from + "_" + i} className="rounded-2 border mb-3" ref={ele.from === collapsedSection ? refScrollTargetAfterCollapsed : null}>
+                                    <PriceItem 
+                                        price = {
+                                            ele.prices.filter(e => 
+                                                (
+                                                    (filter.freeCancel === true ? e.priceFeature.freeCancel===true : true) &&
+                                                    (filter.freeBreakfast === true ? e.priceFeature.freeBreakfast===true : true) &&
+                                                    (filter.payAtHotel === true ? e.priceFeature.payAtHotel===true : true)
+                                                )
+                                            )
+                                            .sort((a, b) => a.price > b.price ? 1 : -1).at(0) || initialPriceInfo
                                         } 
                                         from={ele.from} />
-                                    <label className="text-primary link p-2 cursor-pointer w-100 ms-4" onClick={() => toggleExpand(ele.from)}>
-                                        Show {ele.prices.length - 1}  more prices from {ele.from}.com
-                                    </label>
+                                        {
+                                        (ele.prices.filter(e => 
+                                            (
+                                                (filter.freeCancel === true ? e.priceFeature.freeCancel===true : true) &&
+                                                (filter.freeBreakfast === true ? e.priceFeature.freeBreakfast===true : true) &&
+                                                (filter.payAtHotel === true ? e.priceFeature.payAtHotel===true : true)
+                                            )
+                                        ).length - 1) > 0 ? (
+                                            <label className="text-primary p-2 link cursor-pointer w-100 ms-4" onClick={() => toggleExpand(ele.from)}>
+                                                Show {ele.prices.filter(e => 
+                                                (
+                                                    (filter.freeCancel === true ? e.priceFeature.freeCancel===true : true) &&
+                                                    (filter.freeBreakfast === true ? e.priceFeature.freeBreakfast===true : true) &&
+                                                    (filter.payAtHotel === true ? e.priceFeature.payAtHotel===true : true)
+                                                )
+                                            ).length - 1} more prices from {ele.from}.com
+                                            </label>
+                                        ) : null
+                                    }
                                 </div>
                             }                            
                         }

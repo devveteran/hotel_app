@@ -586,6 +586,13 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.20.2"
 
+"@babel/plugin-syntax-flow@^7.21.4":
+  version "7.22.5"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-flow/-/plugin-syntax-flow-7.22.5.tgz#163b820b9e7696ce134df3ee716d9c0c98035859"
+  integrity sha512-9RdCl0i+q0QExayk2nOS7853w08yLucnnPML6EN9S8fgMPVtdLDCdx/cOQ/i44Lb9UeQX9A35yaqBBOMMZxPxQ==
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.22.5"
+
 "@babel/plugin-syntax-import-assertions@^7.20.0":
   version "7.20.0"
   resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-import-assertions/-/plugin-syntax-import-assertions-7.20.0.tgz#bb50e0d4bea0957235390641209394e87bdb9cc4"
@@ -923,7 +930,7 @@
     "@babel/plugin-syntax-jsx" "^7.21.4"
     "@babel/types" "^7.21.5"
 
-"@babel/plugin-transform-react-jsx@^7.22.5":
+"@babel/plugin-transform-react-jsx@^7.21.5", "@babel/plugin-transform-react-jsx@^7.22.5":
   version "7.22.5"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-react-jsx/-/plugin-transform-react-jsx-7.22.5.tgz#932c291eb6dd1153359e2a90cb5e557dcf068416"
   integrity sha512-rog5gZaVbUip5iWDMTYbVM15XQq+RkUKhET/IHR6oizR+JEoN6CAfTTuHcK4vwUyzca30qqHqEpzBOnaRMWYMA==
@@ -5544,6 +5551,15 @@ google-map-react@^2.2.1:
     "@mapbox/point-geometry" "^0.1.0"
     eventemitter3 "^4.0.4"
     prop-types "^15.7.2"
+
+google-maps-react-markers@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/google-maps-react-markers/-/google-maps-react-markers-1.2.4.tgz#212c9357b5baa2f5aa2d713b1ddd530c3afb107c"
+  integrity sha512-m6qYc5DLhlyuj9EgeL+FXrpnHuE0q5V6jL1M+raAa/qojJGX53Als3zPz+PUvBcZdLSpStYQgMu6PerYsXDIxg==
+  dependencies:
+    "@babel/plugin-syntax-flow" "^7.21.4"
+    "@babel/plugin-transform-react-jsx" "^7.21.5"
+    prop-types "^15.8.1"
 
 gopd@^1.0.1:
   version "1.0.1"

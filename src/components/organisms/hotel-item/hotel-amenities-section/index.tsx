@@ -2,6 +2,7 @@ import { AmenityType } from "@constants/types";
 import { useEffect, useRef } from "react";
 
 interface PropType {
+    hotelId: number,
     amenities: AmenityType,
     buttonLeft: boolean,
     showAll: boolean,
@@ -40,7 +41,7 @@ const initialTopAmenities: TopAmenitesType = {
     gym: {...initialAmenityItem, name:'Gym'},
 };
 
-const HotelAmenities = ({amenities, buttonLeft, showAll, toggleAllAmenities}: PropType) => {
+const HotelAmenities = ({amenities, buttonLeft, showAll, toggleAllAmenities, hotelId}: PropType) => {
     const refAmenitiesToFocus = useRef<any>(null);
     const refAmenitiesToggleBtn = useRef<any>(null);
     let topAmenities: TopAmenitesType = initialTopAmenities;
@@ -195,7 +196,7 @@ const HotelAmenities = ({amenities, buttonLeft, showAll, toggleAllAmenities}: Pr
                         Object.keys(topAmenities).map((ele, i) => {
                             let val = Object.values(topAmenities)[i];
                             if (val.value === true) {
-                                return <li className={`list-group-item mb-3`}>
+                                return <li key={"ame_av_"+ hotelId +"_" + i} className={`list-group-item mb-3`}>
                                     {ElementAmenitiy(ele)}
                                     <span className="text-s">{val.name}</span>
                                 </li>
@@ -207,7 +208,7 @@ const HotelAmenities = ({amenities, buttonLeft, showAll, toggleAllAmenities}: Pr
                         Object.keys(topAmenities).map((ele, i) => {
                             let val = Object.values(topAmenities)[i];
                             if (val.value === false) {
-                                return <li className={`list-group-item mb-3 opacity-25`}>
+                                return <li key={"ame_unav_" + hotelId + "_" + i} className={`list-group-item mb-3 opacity-25`}>
                                     {ElementAmenitiy(ele)}
                                     <span className="text-s">{val.name}</span>
                                 </li>
@@ -257,7 +258,7 @@ const HotelAmenities = ({amenities, buttonLeft, showAll, toggleAllAmenities}: Pr
                 {
                     Object.keys(amenities).map((ele, i) => {
                         return (
-                            <div className="float-start mb-4 col-4">
+                            <div key={hotelId + "_" + ele + "_" + i} className="float-start mb-4 col-4">
                                 <p ref={i === 0 ? refAmenitiesToFocus : null} className="text-grey-900">{ele}</p>
                                 <ul>
                                     {getAmenityItems(amenities[ele])}
