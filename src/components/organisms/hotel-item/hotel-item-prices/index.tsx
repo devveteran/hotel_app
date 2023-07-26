@@ -7,42 +7,28 @@ interface PropType {
     hotel: HotelInfo
 };
 
-const _price: PriceInfo = {
-    title: "Superior King Room - Free WiFi",
-    featured: false,
-    price: 125,
-    priceTwoNights: 250,
-    url: "https://localhost:3000",
-    priceFeature: {
-        freeCancel: true,
-        freeBreakfast: true,
-        payAtHotel: true
-    }
-}
-
-const _prices = [
-    {..._price, featured:true},
-    _price,
-    _price,
-    _price,
-    _price
-];
-const otherPrices: Array<OtherPrices> = [
-    {
-        from: 'hotels',
-        prices: JSON.parse(JSON.stringify(_prices))
-    },
-    {
-        from: 'expedia',
-        prices: JSON.parse(JSON.stringify(_prices))
-    },
-];
-
 const HotelItemPrices = ({hotel}: PropType) => {
     const [filter, setFilter] = useState<PriceFilterType>({...initialPriceFilter});
     const [expandedFrom, setExpandedFrom] = useState<{[arg:string]:boolean}>({});
     const [collapsedSection, setCollapsedSection] = useState<string>("");
     const refScrollTargetAfterCollapsed = useRef<any>(null);
+    // const [sort, setSort] = useState<string>("recommended");
+    const [otherPrices, setOtherPrices] = useState<Array<OtherPrices>>(JSON.parse(JSON.stringify(hotel.otherPrices)));
+
+    const onChangeSort = (v: any) => {
+        // setSort(v.target.value);
+        let sort = v.target.value;
+        if (sort === 'recommended') {
+            setOtherPrices(JSON.parse(JSON.stringify(hotel.otherPrices)));
+        } else if (sort === 'price-asc') {
+            let tmpPrices = JSON.parse(JSON.stringify(otherPrices)) as Array<OtherPrices>;
+            let newPrices = tmpPrices.sort((a, b) => (
+                a.prices.sort((pa, pb) => pa.price > pb.price ? 1 : -1)[0] > b.prices.sort((pa, pb) => pa.price > pb.price ? 1 : -1)[0] ? 1: -1
+            ));
+            console.log(newPrices);
+            setOtherPrices(JSON.parse(JSON.stringify(newPrices)));
+        }
+    }
     
     const updateFilter = (v: any) => {
         setFilter({...filter, ...v});
@@ -117,9 +103,9 @@ const HotelItemPrices = ({hotel}: PropType) => {
             <div className="d-flex">
                 <div className="d-block pe-2">
                     <p className="mb-1 text-grey-900 fw-bold">Sort by:</p>
-                    <select className="form-select p-2 rounded-2 border pe-7">
-                        <option>Our recommendations</option>
-                        <option>Price from low to high</option>
+                    <select className="form-select p-2 rounded-2 border pe-7" onChange={onChangeSort}>
+                        <option value="recommended">Our recommendations</option>
+                        <option value="price-asc">Price from low to high</option>
                     </select>
                 </div>
                 <div className="d-block px-2 mb-3">
@@ -155,7 +141,9 @@ const HotelItemPrices = ({hotel}: PropType) => {
             <div className="d-flex flex-column flex-grow-1">
                 {/* <div className={`rounded-2 border mb-3 ${otherPrices.length === 0 ? 'd-none' : ''}`}></div> */}
                 {
-                    hotel.otherPrices.map((ele, i) => {
+                    //a.prices.sort((ap1, ap2) => (ap1.price > ap2.price)).at(0)?.price > 
+                    // b.prices.sort((bp1, bp2) => (bp1.price > bp2.price)).at(0)?.price
+                    otherPrices.map((ele, i) => {
                         if(expandedFrom[ele.from] && expandedFrom[ele.from] === true) {
                             if (ele.prices.filter(e => 
                                 (

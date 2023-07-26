@@ -1,4 +1,42 @@
 .photoviewer_wrapper {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.9);
     z-index: 1050 !important;
+}
+.close_button {
+    color: white;
+    line-height: 1 !important;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.close_button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+.image_roll {
+    height: min-content;
+    overflow-y: auto !important;
+    min-width:300px;
+}
+.image_roll_item {
+    height: 150px;
+}
+.image_roll_hover_item:hover, .image_roll_hover_item.selected {
+    border: 4px solid var(--bs-gray-100);
+}
+.nav_imgage {
+    top: 50%;
+    transform: translateY(-50%);
+    line-height: 1;
+}
+
+.image_nav_icon {
+    color: white;
+}
+.image_nav_icon:hover {
+    background-color: rgba(255, 255, 255, 0.3);
 }

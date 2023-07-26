@@ -105,7 +105,7 @@ const HotelItemPhotos = ({hotel}: PropType ) => {
             </div>
             {
                 photoViewer === true ? (
-                    <PhotoViewer hotel={hotel} />
+                    <PhotoViewer hotel={hotel} onClose={() => {setPhotoViewer(false)}}/>
                 ) : null
             }
         </div>
