@@ -25,10 +25,10 @@ export const userInstance = () => {
     headers: {
       Authorization: localStorage.getItem('hotelauth')
         ? `${'Bearer '}${localStorage.getItem('hotelauth')}`
-        : '',
-      authtoken: localStorage.getItem('hoteltok')
-        ? `${'Bearer '}${localStorage.getItem('hoteltok')}`
-        : '',
+        : 'HOTELAUTH@@@',
+      authtoken: localStorage.getItem('hoteltoken')
+        ? `${'Bearer '}${localStorage.getItem('hoteltoken')}`
+        : 'HOTELAUTH@@@',
     },
     timeout: 1000 * 20,
   });

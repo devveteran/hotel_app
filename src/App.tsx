@@ -1,9 +1,14 @@
 import './App.scss';
 import Home from './pages/home';
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import SearchPage from './pages/searchpage';
+import Login from './pages/login';
+import LoginModal from '@containers/common/signup_modal';
+import { GlobalContext } from '@context/usercontext';
+import { STORAGE_USERINFO_KEY } from '@constants/constants';
+import { UserInfoType } from '@constants/types';
 
 export const insertScript = (scriptToAdd: string) => {
   const script = document.createElement("script");
@@ -34,6 +39,16 @@ export const removeScript = (scriptToremove: string) => {
 }
 
 function App() {
+  const {userInfo, setUserInfo} = useContext(GlobalContext);
+  useEffect(() => {
+    if (userInfo.name === '') {
+      const userdata = localStorage.getItem(STORAGE_USERINFO_KEY);
+//      console.log("---", userdata)
+
+      if (userdata !== null)
+        setUserInfo(JSON.parse(userdata) as UserInfoType);
+  }
+  }, []);
   
   return (
     <BrowserRouter>

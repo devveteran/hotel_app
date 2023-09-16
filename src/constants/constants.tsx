@@ -1,0 +1,2 @@
+export const STORAGE_USERINFO_KEY = "MUHAM_USERINFO";
+

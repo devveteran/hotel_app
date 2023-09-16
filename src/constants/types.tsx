@@ -247,3 +247,23 @@ export const initialMapViewState = {
     lat: 0,
     lon: 0,
 }
+
+export interface UserInfoType {
+    id: number,
+    name: string,
+    email: string,
+    password: string,
+    regdate: string,
+    logcount: number,
+    lastlogindate: string,
+}
+
+export const defaultUserInfo: UserInfoType = {
+    id: 0,
+    name: '',
+    email: '',
+    password: '',
+    regdate: '',
+    logcount: 0,
+    lastlogindate : ''
+}

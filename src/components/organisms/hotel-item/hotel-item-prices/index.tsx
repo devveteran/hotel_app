@@ -25,7 +25,6 @@ const HotelItemPrices = ({hotel}: PropType) => {
             let newPrices = tmpPrices.sort((a, b) => (
                 a.prices.sort((pa, pb) => pa.price > pb.price ? 1 : -1)[0] > b.prices.sort((pa, pb) => pa.price > pb.price ? 1 : -1)[0] ? 1: -1
             ));
-            console.log(newPrices);
             setOtherPrices(JSON.parse(JSON.stringify(newPrices)));
         }
     }

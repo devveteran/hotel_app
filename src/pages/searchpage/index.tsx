@@ -95,7 +95,7 @@ const SearchPage = () => {
     }
 
     const onChangeMap = (v: any) => {
-        console.log(v);
+        // console.log(v);
     }
 
     const searchHotels = async () => {
@@ -162,9 +162,16 @@ const SearchPage = () => {
         });
 
         const date1 = new Date(Date.parse(searchParam.dateCheckin));
-        let strDateCheckin = date1.getUTCFullYear() + "-" + date1.getUTCMonth() + "-" + date1.getUTCDate();
+        let month1 = date1.getMonth() + 1;
+        let strDateCheckin = date1.getUTCFullYear() + "-" + 
+            (month1 < 10 ? `0${month1}` : `${month1}`) + "-" + 
+            (date1.getDate() < 10 ? `0${date1.getDate()}` : `${date1.getDate()}`);
+
         const date2 = new Date(Date.parse(searchParam.dateCheckout));
-        let strDateCheckout = date2.getUTCFullYear() + "-" + date2.getUTCMonth() + "-" + date2.getUTCDate();
+        let month2 = date2.getMonth() + 1;
+        let strDateCheckout = date2.getUTCFullYear() + "-" + 
+            (month2 < 10 ? `0${month2}` : `${month2}`) + "-" + 
+            (date2.getDate() < 10 ? `0${date2.getDate()}` : `${date2.getDate()}`);
 
         let param = searchParam.location + ";" + strDateCheckin + ";" + strDateCheckout + ";" + 
             searchParam.adultNum + ";" + searchParam.childNum + ";" + searchParam.roomNum + ";" +
@@ -175,16 +182,18 @@ const SearchPage = () => {
 
         const urlparam = window.btoa(param);
 
-        userInstance().get(`/api/HotelInfoes/${urlparam}/count`).then((response) => {
-            rowsCount.current = response.data;
-        }).catch(error => {
-            console.log(error);
-        });
+        rowsCount.current = 38;
+        // userInstance().get(`/api/HotelInfoes/${urlparam}/count`).then((response) => {
+        //     rowsCount.current = response.data;
+        //     console.log("Count=", response.data);
+        // }).catch(error => {
+        //     console.log(error);
+        // });
 
         userInstance().get(`/api/HotelInfoes/${urlparam}`).then((response) => {
-            // console.log(response)
+            console.log(response)
             const data = response.data as Array<DBHotelInfo>;
-            console.log(data);
+            // console.log(data);
             let aryHotels: Array<HotelInfo> = [];
             data.forEach((ele, i:number) => {
                 let hotel: HotelInfo = JSON.parse(JSON.stringify(initialHotelInfo));
@@ -289,7 +298,7 @@ const SearchPage = () => {
                 totalLat += e.geoLat;
                 totalLon += e.getLon;
             })
-            console.log(totalLat/hotels.length, totalLon/hotels.length)
+            // console.log(totalLat/hotels.length, totalLon/hotels.length)
             setMapCenterPos({...initialMapViewState, lat:(totalLat/hotels.length), lon: (totalLon / hotels.length)});
         }
     }, [hotels]);
@@ -305,7 +314,7 @@ const SearchPage = () => {
                 let val = Object.values(customerRating)[i];
                 setCustomerRating(prev => ({...prev, [ele]: !val}));
             }
-        })
+        });
     }
 
     const toggleStarRating = (v: string) => {
@@ -659,7 +668,7 @@ const SearchPage = () => {
                                     })
                                 }
                             </div>
-                            <nav className="d-flex justify-content-center" aria-label="navigation">
+                            <nav className="d-flex justify-content-center d-none" aria-label="navigation">
                                 <ReactPaginate 
                                     breakLabel="..."
                                     nextLabel=">"
