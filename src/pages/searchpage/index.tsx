@@ -7,16 +7,17 @@ import './searchpage.scss';
 import Footer from "@containers/common/footer";
 import GoogleMap from 'google-map-react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight, faLocation, faMapMarkerAlt, faSlidersH } from "@fortawesome/free-solid-svg-icons";
+import { faMapMarkerAlt, faSlidersH } from "@fortawesome/free-solid-svg-icons";
 import ReactSlider from 'react-slider';
 import { Dropdown } from "react-bootstrap";
-import { CustomerRatingType, DBHotelInfo, HotelInfo, MapViewState, SearchParamType, StarRatingType, TopAmenitiesForSearch, initialCustomerRating, initialHotelInfo, initialMapViewState, initialStarRating } from "@constants/types";
+import { CustomerRatingType, DBHotelInfo, HotelInfo, MapViewState, 
+    StarRatingType, TopAmenitiesForSearch, initialCustomerRating, 
+    initialHotelInfo, initialMapViewState, initialStarRating } from "@constants/types";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@store/index";
 import { userInstance } from "@services/axios";
 import ReactPaginate from 'react-paginate';
 import { setMapViewState } from "@store/reducers/global";
-import HotelMapMarker from "@organisms/hotel-item/hotel-marker-map";
 
 const MIN_PRICE = 500
 const MAX_PRICE = 2000
@@ -183,14 +184,14 @@ const SearchPage = () => {
         const urlparam = window.btoa(param);
 
         rowsCount.current = 38;
-        // userInstance().get(`/api/HotelInfoes/${urlparam}/count`).then((response) => {
+        // userInstance().get(`/HotelInfoes/${urlparam}/count`).then((response) => {
         //     rowsCount.current = response.data;
         //     console.log("Count=", response.data);
         // }).catch(error => {
         //     console.log(error);
         // });
 
-        userInstance().get(`/api/HotelInfoes/${urlparam}`).then((response) => {
+        userInstance().get(`/Hotel/${urlparam}`).then((response) => {
             console.log(response)
             const data = response.data as Array<DBHotelInfo>;
             // console.log(data);
@@ -200,6 +201,7 @@ const SearchPage = () => {
                 // hotel.photoURIs = [];
 
                 hotel.id = ele.id;
+                hotel.code = ele.code;
                 hotel.name = ele.name;
                 hotel.address = ele.address;
                 hotel.url = ele.url;
@@ -654,11 +656,11 @@ const SearchPage = () => {
                                 {
                                     hotels.map((ele, i) => {
                                         return (
-                                        <div key={"hotel_" + ele.id}
+                                        <div key={"hotel_" + ele.code}
                                             ref={i=== 0 ? refHotelSection: null}
                                             onMouseOver={(e) => onHotelItemHover(e, ele)}>
                                             <HotelItemCard 
-                                                key={ele.id}
+                                                key={ele.code}
                                                 viewMode="list"
                                                 viewMap={viewMap}
                                                 hotel={ele}
@@ -696,8 +698,8 @@ const SearchPage = () => {
                                     lng: mapCenterPos.lon
                                 }}
                                 // onChange={onChangeMap}
-                                bootstrapURLKeys={{ key: "" }}
-                                // yesIWantToUseGoogleMapApiInternals
+                                bootstrapURLKeys={{ key: "AIzaSyCTM6UbiaV-lMhapNPFuI1vfVBL_2h6peM" }}
+                                yesIWantToUseGoogleMapApiInternals
                                 defaultZoom={8}
                                 onGoogleApiLoaded={({map, maps}: {map:any, maps:any}) => setExtent(map, maps)}
                             >

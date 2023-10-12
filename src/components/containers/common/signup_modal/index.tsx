@@ -78,7 +78,7 @@ const SignupModal = ({onCloseModal} : PropType) => {
                 setEmailValidation(true);
                 setMessage('');
 
-                userInstance().post(`/api/User/${urlparam}`).then((response) => {
+                userInstance().post(`/User/${urlparam}`).then((response) => {
                     const data = response.data;
                     
                     if (data.value?.detail?.toLowerCase() === "duplicate") {

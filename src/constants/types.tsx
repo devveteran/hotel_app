@@ -17,6 +17,7 @@ export interface PriceHistoryType {
 
 export interface DBHotelInfo {
     id: number,
+    code: number,
     name: string,
     description: string,
     address: string,
@@ -80,6 +81,7 @@ export const initialOtherPrices: OtherPrices = {
 
 export interface HotelInfo {
     id: number,
+    code: number,
     name: string,
     description: string,
     address: string,
@@ -120,6 +122,7 @@ export interface HotelInfo {
 
 export const initialHotelInfo: HotelInfo = {
     id: 0,
+    code: 0,
     name: '',
     description: '',
     starRate: 0,

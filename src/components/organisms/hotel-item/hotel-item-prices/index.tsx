@@ -151,7 +151,7 @@ const HotelItemPrices = ({hotel}: PropType) => {
                                     (filter.payAtHotel === true ? e.priceFeature.payAtHotel===true : true)
                                 )
                             ).length > 0) {
-                                return <div key={hotel.id + "_" + ele.from + "_" + i} className="border rounded-2 mb-3">
+                                return <div key={hotel.code + "_" + ele.from + "_" + i} className="border rounded-2 mb-3">
                                     {getOtherprices(ele)}
                                 </div>
                             } else return null
@@ -163,7 +163,7 @@ const HotelItemPrices = ({hotel}: PropType) => {
                                     (filter.payAtHotel === true ? e.priceFeature.payAtHotel===true : true)
                                 )
                             ).length > 0) {
-                                return <div key={hotel.id + "_" + ele.from + "_" + i} className="rounded-2 border mb-3" ref={ele.from === collapsedSection ? refScrollTargetAfterCollapsed : null}>
+                                return <div key={hotel.code + "_" + ele.from + "_" + i} className="rounded-2 border mb-3" ref={ele.from === collapsedSection ? refScrollTargetAfterCollapsed : null}>
                                     <PriceItem 
                                         price = {
                                             ele.prices.filter(e => 
@@ -204,7 +204,7 @@ const HotelItemPrices = ({hotel}: PropType) => {
                                     (filter.payAtHotel === true ? e.priceFeature.payAtHotel===true : true)
                                 )
                             ).length > 0){
-                                return <div key={hotel.id + "_" + ele.from + "_" + i} className="rounded-2 border mb-3" ref={ele.from === collapsedSection ? refScrollTargetAfterCollapsed : null}>
+                                return <div key={hotel.code + "_" + ele.from + "_" + i} className="rounded-2 border mb-3" ref={ele.from === collapsedSection ? refScrollTargetAfterCollapsed : null}>
                                     <PriceItem 
                                         price = {
                                             ele.prices.filter(e => 

@@ -9,6 +9,7 @@ import HotelRatingSection from "../hotel-rating-section";
 import { server } from "@services/axios";
 import HotelMapMarker from "../hotel-marker-map";
 import { useState } from "react";
+import { getBase64 } from "@constants/functions";
 
 interface PropType {
     hotel: HotelInfo;
@@ -46,16 +47,16 @@ const HotelItemOverview = ({hotel, viewDetail}: PropType) => {
             <div role="tabpanel" id="tabs-211-panel-0" aria-labelledby="tabs-211-tab-0" className="w-full">
                 <div className="mt-4 px-1 d-flex justify-content-center relative gap-1" aria-hidden="true">
                     <img className="rounded-2 d-sm-block cursor-pointer" 
-                        src={`${server}/Images/${hotel.name}/${hotel.photoURIs[0]}`} draggable="false"
+                        src={`${server}/HB_Image/${getBase64(hotel.photoURIs[0])}`} draggable="false"
                         onClick={() => viewDetail("photos")}/>
                     <img className="rounded-2 d-none d-sm-block cursor-pointer" 
-                        src={`${server}/Images/${hotel.name}/${hotel.photoURIs[1]}`} draggable="false"
+                        src={`${server}/HB_Image/${getBase64(hotel.photoURIs[1])}`} draggable="false"
                         onClick={() => viewDetail("photos")}/>
                     <img className="rounded-2 d-none d-md-block cursor-pointer" 
-                        src={`${server}/Images/${hotel.name}/${hotel.photoURIs[2]}`} draggable="false"
+                        src={`${server}/HB_Image/${getBase64(hotel.photoURIs[2])}`} draggable="false"
                         onClick={() => viewDetail("photos")}/>
                     <img className="rounded-2 d-none d-xl-block cursor-pointer" 
-                        src={`${server}/Images/${hotel.name}/${hotel.photoURIs[3]}`} draggable="false"
+                        src={`${server}/HB_Image/${getBase64(hotel.photoURIs[3])}`} draggable="false"
                         onClick={() => viewDetail("photos")}/>
                 </div>
                 <footer className="mt-3 px-4 text-end">
@@ -111,10 +112,10 @@ const HotelItemOverview = ({hotel, viewDetail}: PropType) => {
                                                     lat: mapCenter.lat,
                                                     lng: mapCenter.lng
                                                 }}
-                                                bootstrapURLKeys={{ key: "" }}
-                                                // yesIWantToUseGoogleMapApiInternals
+                                                bootstrapURLKeys={{ key: "AIzaSyCTM6UbiaV-lMhapNPFuI1vfVBL_2h6peM" }}
+                                                yesIWantToUseGoogleMapApiInternals
                                                 defaultZoom={10}
-                                                onGoogleApiLoaded={({map, maps}: {map:any, maps:any}) => setExtent(map, maps)}                                                
+                                                onGoogleApiLoaded={({map, maps}: {map:any, maps:any}) => setExtent(map, maps)}
                                             >
                                                 {/* <HotelMapMarker hotel={hotel} text={"www"} 
                                                 lat={hotel.geoLat} lng={hotel.getLon}/> */}

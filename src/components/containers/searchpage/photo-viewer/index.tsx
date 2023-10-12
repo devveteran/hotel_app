@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { server } from "@services/axios";
 import { useEffect, useState } from "react";
+import { getBase64 } from "@constants/functions";
 
 interface PropType {
     hotel: HotelInfo
@@ -24,9 +25,9 @@ const PhotoViewer = ({hotel, onClose}: PropType) => {
     }
 
     useEffect(() => {
-        document.body.style.overflow = "hidden";
+        //document.body.style.overflow = "hidden";
         return (() => {
-            document.body.style.overflow = "auto";
+//            document.body.style.overflow = "auto";
         });
     }, []);
     
@@ -40,24 +41,23 @@ const PhotoViewer = ({hotel, onClose}: PropType) => {
                 hotel.photoURIs.map((ele, i) => {
                     return <div key={ele} className={`position-relative m-0 p-0 d-flex justify-content-center cursor-pointer ${styles.image_roll_item}`}
                         onClick={() => setCurImage(i)}>
-                        <img className={`p-1 rounded-2 w-100 h-100 `} style={{width:'150px'}} src={`${server}/Images/${hotel.name}/${ele}`} draggable="false"/>
+                        <img className={`p-1 rounded-2 w-100 h-100 `} style={{width:'150px'}} src={`${server}/HB_Image/${getBase64(ele)}`} draggable="false"/>
                         <span className={`position-absolute m-1 start-0 top-0 end-0 bottom-0 rounded-2 ${styles.image_roll_hover_item} ${i === curImage ? styles.selected : ''}`} />
                     </div>
                 })
             }
         </div>
-        <div className={`col-md-9 d-flex m-6 position-relative`}>
+        <div className={`col-md-9 d-flex m-6 position-relative`} style={{'overscrollBehavior': 'contain'}}>
             <div className={`position-absolute start-0 ${styles.nav_imgage}`} onClick={() => increaseIndex(-1)}>
                 <FontAwesomeIcon size="xl" className={`p-3 cursor-pointer ${styles.image_nav_icon}`} icon={faChevronLeft}/>
             </div>
             <div className="h-100 w-100 d-flex justify-content-center">
-                <img className="p-1 rounded-2 mw-100 h-auto object-fit-contain user-select-none" src={`${server}/Images/${hotel.name}/${hotel.photoURIs[curImage]}`} draggable="false"/>
+                <img className="p-1 rounded-2 mw-100 h-auto object-fit-contain user-select-none" src={`${server}/HB_Image/${getBase64(`xxl/${hotel.photoURIs[curImage]}`)}`} draggable="false"/>
             </div>
             <div className={`position-absolute end-0 ${styles.nav_imgage}`} onClick={() => increaseIndex(1)}>
                 <FontAwesomeIcon size="xl" className={`p-3 cursor-pointer ${styles.image_nav_icon}`} icon={faChevronRight}/>
             </div>
         </div>
-
     </div>)
 }
 export default PhotoViewer;

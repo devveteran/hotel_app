@@ -30,7 +30,7 @@ export const userInstance = () => {
         ? `${'Bearer '}${localStorage.getItem('hoteltoken')}`
         : 'HOTELAUTH@@@',
     },
-    timeout: 1000 * 20,
+    timeout: 1000 * 300,
   });
 };
 

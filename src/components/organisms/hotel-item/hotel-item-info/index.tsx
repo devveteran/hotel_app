@@ -56,8 +56,8 @@ const HotelItemInfo = ({hotel, showAll}: PropType) => {
                                 lat: hotel.geoLat,
                                 lng: hotel.getLon
                             }}
-                            bootstrapURLKeys={{ key: "" }}
-                            // yesIWantToUseGoogleMapApiInternals
+                            bootstrapURLKeys={{ key: "AIzaSyCTM6UbiaV-lMhapNPFuI1vfVBL_2h6peM" }}
+                            yesIWantToUseGoogleMapApiInternals
                             defaultZoom={8}
                             onGoogleApiLoaded={({map, maps}: {map:any, maps:any}) => setExtent(map, maps)}
                         >

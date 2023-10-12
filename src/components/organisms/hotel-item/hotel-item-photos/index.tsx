@@ -5,6 +5,7 @@ import "react-multi-carousel/lib/styles.css";
 import { server } from "@services/axios";
 import { useEffect, useRef, useState } from "react";
 import PhotoViewer from "@containers/searchpage/photo-viewer";
+import { getBase64 } from "@constants/functions";
 
 interface PropType {
     hotel: HotelInfo,
@@ -54,12 +55,15 @@ const HotelItemPhotos = ({hotel}: PropType ) => {
                 <div className="row row-cols-4 mb-0 px-4">
                     {
                         hotel.photoURIs.map((ele, i) => {
-                            return (
-                                <li key={ele} className="list-group-item">
-                                    <img className="rounded-3 d-sm-block w-100 p-1 hotel-card-img cursor-pointer" 
-                                    src={`${server}/Images/${hotel.name}/${ele}`} draggable="false"/>
-                                </li>
-                            )
+                            if ( i < 8)
+                                return (
+                                    <li key={ele} className="list-group-item">
+                                        <img className="rounded-3 d-sm-block w-100 p-1 hotel-card-img cursor-pointer" 
+                                        src={`${server}/HB_Image/${getBase64(ele)}`} draggable="false"/>
+                                    </li>
+                                )
+                            else
+                                return null
                         })
                     }
                 </div>
@@ -91,7 +95,8 @@ const HotelItemPhotos = ({hotel}: PropType ) => {
                         hotel.photoURIs.map((ele, i) => {
                             return (
                                 <div key={ele} className="tns-item rounded-2 d-flex justify-content-center">
-                                    <img src={`${server}/Images/${hotel.name}/${ele}`} draggable="false"/>
+                                    <img src={`${server}/HB_Image/${getBase64(ele)}`} draggable="false"/>
+                                    {/* ${server}/Images/${hotel.name}/*/}
                                 </div>
                             )
                         })

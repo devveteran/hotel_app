@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import DetailView from "@containers/searchpage/detailview";
 import { HotelInfo, MapViewState } from "@constants/types";
 import { server } from "@services/axios";
-import { evalReviewWord } from "@constants/functions";
+import { evalReviewWord, getBase64 } from "@constants/functions";
 
 const responsive = {
     desktop: {
@@ -90,7 +90,13 @@ const HotelItemCard = ({viewMode, hotel, viewMap}: PropType) =>
                     </div> */}
                     <div ref={refInfoCard} className="tiny-slider arrow-round arrow-xs arrow-dark overflow-hidden">
                         <div className="tns-outer">
-                            <Carousel
+                            <div className="tns-ovh cursor-pointer">
+                                <div className="tns-item tns-slide-cloned rounded-2" aria-hidden="true" tabIndex={-1} 
+                                        onClick={() => viewDetail('photos')}>
+                                        <img className="hotel-card-img" src={`${server}/HB_Image/${getBase64(hotel.photoURIs[0])}`}/>
+                                </div>
+                            </div>
+                            {/* <Carousel
                                 className={`tns-ovh cursor-pointer`}
                                 swipeable={true}
                                 draggable={false}
@@ -107,9 +113,9 @@ const HotelItemCard = ({viewMode, hotel, viewMap}: PropType) =>
                             >
                                 <div className="tns-item tns-slide-cloned rounded-2" aria-hidden="true" tabIndex={-1} 
                                     onClick={() => viewDetail('photos')}>
-                                    <img className="hotel-card-img" src={`${server}/Images/${hotel.name}/${hotel.photoURIs[0]}`}/>
+                                    <img className="hotel-card-img" src={`${hotel.photoURIs[0]}`}/>
                                 </div>
-                            </Carousel>
+                            </Carousel> */}
                         </div>
                     </div>
                 </div>

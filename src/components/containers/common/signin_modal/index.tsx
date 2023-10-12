@@ -37,7 +37,7 @@ const SignInModal = ({onCloseModal, onOpenSignUp} : PropType) => {
         let urlparam = email + ";" + val;
         urlparam = window.btoa(urlparam);
 
-        userInstance().get(`/api/User/${urlparam}`).then((response) => {
+        userInstance().get(`/User/${urlparam}`).then((response) => {
             const data = response.data;
             
             if (data.length === 1) {

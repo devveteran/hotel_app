@@ -3,3 +3,7 @@ export const evalReviewWord = (v: number) => {
         v >=8 ? 'Very Good' :
             v >= 7.5 ? 'Good' : ''
 }
+
+export const getBase64 = (v: string): string => {
+    return window.btoa(v);
+}

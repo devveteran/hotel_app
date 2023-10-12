@@ -21,7 +21,7 @@ code {
 @font-face {
   font-family: "bootstrap-icons";
   src: local("bootstrap-icons"),
-    url("/src/assets/fonts/bootstrap-icons.woff") format("truetype");
+    url("/src/assets/fonts/bootstrap-icons.woff") format("woff");
 }
 
 /* @font-face {
